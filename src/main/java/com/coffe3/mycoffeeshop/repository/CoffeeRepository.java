@@ -1,6 +1,6 @@
-package com.example.mycoffeeshop.repository;
+package com.coffe3.mycoffeeshop.repository;
 
-import com.example.mycoffeeshop.domain.Coffee;
+import com.coffe3.mycoffeeshop.domain.Coffee;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

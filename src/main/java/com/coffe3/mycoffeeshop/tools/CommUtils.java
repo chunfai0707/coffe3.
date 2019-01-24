@@ -1,4 +1,4 @@
-package com.example.mycoffeeshop.tools;
+package com.coffe3.mycoffeeshop.tools;
 
 import java.text.DecimalFormat;
 

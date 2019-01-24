@@ -1,14 +1,15 @@
-package com.example.mycoffeeshop.controller;
+package com.coffe3.mycoffeeshop.controller;
 
-import com.example.mycoffeeshop.domain.Coffee;
-import com.example.mycoffeeshop.repository.CoffeeRepository;
+import com.coffe3.mycoffeeshop.domain.Coffee;
+import com.coffe3.mycoffeeshop.domain.User;
+import com.coffe3.mycoffeeshop.repository.CoffeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -35,12 +36,22 @@ public class MainController {
 
     @GetMapping(value = "/signup")
     public String signUp(ModelMap model) {
+        model.addAttribute("user", new User());
+
         return "signup";
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ModelAndView register() {
-        ModelAndView model = new ModelAndView();
-        return model;
+    public String register(@ModelAttribute("user") User user) {
+
+        System.out.println(user.getUserName());
+        System.out.println(user.getUserEmail());
+        System.out.println(user.getUserPassword());
+
+        String[] str = user.getUserPassword().split(",");
+        System.out.println(str[0]);
+        System.out.println(str[1]);
+
+        return "signup";
     }
 }

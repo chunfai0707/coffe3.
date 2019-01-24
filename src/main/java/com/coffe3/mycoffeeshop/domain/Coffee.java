@@ -1,4 +1,4 @@
-package com.example.mycoffeeshop.domain;
+package com.coffe3.mycoffeeshop.domain;
 
 import lombok.Data;
 
