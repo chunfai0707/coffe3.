@@ -1,24 +1,26 @@
 package com.coffe3.mycoffeeshop.controller;
 
+import com.coffe3.mycoffeeshop.config.WebMvcConfig;
 import com.coffe3.mycoffeeshop.domain.Coffee;
 import com.coffe3.mycoffeeshop.domain.User;
 import com.coffe3.mycoffeeshop.repository.CoffeeRepository;
+import com.coffe3.mycoffeeshop.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @SuppressWarnings("ALL")
 @Controller
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class MainController {
 
-    @Autowired
-    private CoffeeRepository coffeeRepository;
+    private final CoffeeRepository coffeeRepository;
+    private final UserService userService;
+    private final WebMvcConfig webMvcConfig;
 
     @GetMapping({"/"})
     public String hello(ModelMap model) {
@@ -35,23 +37,31 @@ public class MainController {
     }
 
     @GetMapping(value = "/signup")
-    public String signUp(ModelMap model) {
+    public String signUp(ModelMap model,
+                         @RequestParam(value = "message", required = false) String message,
+                         @RequestParam(value = "errormsg", required = false) String errormsg) {
+
         model.addAttribute("user", new User());
+        model.addAttribute("message", message);
+        model.addAttribute("errormsg", errormsg);
 
         return "signup";
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public String register(@ModelAttribute("user") User user) {
+    public String register(@ModelAttribute("user") User user, ModelMap model) {
 
-        System.out.println(user.getUserName());
-        System.out.println(user.getUserEmail());
-        System.out.println(user.getUserPassword());
+        String message = userService.registerUser(user).get(0);
+        if (message.equalsIgnoreCase("Success")) {
+            model.addAttribute("message", message);
 
-        String[] str = user.getUserPassword().split(",");
-        System.out.println(str[0]);
-        System.out.println(str[1]);
+        } else {
 
+            String errormsg = userService.registerUser(user).get(1);
+            model.addAttribute("message", message);
+            model.addAttribute("errormsg", errormsg);
+        }
         return "signup";
+
     }
 }

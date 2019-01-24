@@ -72,18 +72,24 @@
                             <input type="password" name="re_pass" id="re_pass" placeholder="Repeat your password"
                                    th:field="*{userPassword}"/>
                         </div>
-                        <div class="form-group">
-                            <input type="checkbox" name="agree-term" id="agree-term" class="agree-term"/>
-                            <label for="agree-term" class="label-agree-term"><span><span></span></span>I agree all
-                                statements in <a href="#" class="term-service">Terms of service</a></label>
-                        </div>
                         <div class="form-group form-button">
                             <input type="submit" name="signup" id="signup" class="form-submit" value="Register"/>
                         </div>
                     </form>
+                    <br>
+                    <div th:switch="${message}">
+                        <div th:case="'Success'" class="alert alert-success">
+                            <strong>Success! </strong> Registration Succesful.
+                            <span>Click <a href="login"><strong>Here</strong></a> to Login.</span>
+                        </div>
+                        <div th:case="'Failed'" class="alert alert-danger">
+                            <strong>Failure! </strong> Registration Failed.
+                            <strong th:text="${errormsg}"></strong>
+                        </div>
+                    </div>
                 </div>
                 <div class="signup-image">
-                    <figure><img src="images/signup-image.jpg" alt="sing up image"></figure>
+                    <figure><img src="images/signup-image.jpg" alt="sign up image"></figure>
                     <a href="login" class="signup-image-link">I am already member</a>
                 </div>
             </div>
