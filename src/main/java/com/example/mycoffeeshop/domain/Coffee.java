@@ -17,8 +17,8 @@ import java.util.Date;
 public class Coffee {
 
     @Id
-    @Column(name = "coffe3_id")
-    private Integer coffe3Id;
+    @Column(name = "coffee_id")
+    private Integer coffeeId;
     @Column(name = "coffee_name")
     private String coffeeName;
     @Column(name = "coffee_price")
