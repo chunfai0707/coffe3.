@@ -31,11 +31,6 @@ public class MainController {
         return "index";
     }
 
-    @GetMapping(value = "/login")
-    public String login() {
-        return "login";
-    }
-
     @GetMapping(value = "/signup")
     public String signUp(ModelMap model,
                          @RequestParam(value = "message", required = false) String message,
@@ -57,9 +52,9 @@ public class MainController {
 
         } else {
 
-            String errormsg = userService.registerUser(user).get(1);
+            String errorMsg = userService.registerUser(user).get(1);
             model.addAttribute("message", message);
-            model.addAttribute("errormsg", errormsg);
+            model.addAttribute("errormsg", errorMsg);
         }
         return "signup";
 

@@ -5,6 +5,7 @@ import com.coffe3.mycoffeeshop.domain.User;
 import com.coffe3.mycoffeeshop.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final WebMvcConfig webMvcConfig;
-
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public List<String> registerUser(User user) {
 
@@ -32,9 +33,11 @@ public class UserService {
 
                 userToRegister.setUserName(user.getUserName());
                 userToRegister.setUserEmail(user.getUserEmail());
-                userToRegister.setUserPassword(webMvcConfig.passwordEncoder().encode(user.getUserPassword()));
+                userToRegister.setUserPassword(bCryptPasswordEncoder.encode(user.getUserPassword()));
                 userToRegister.setUserCreatedAt(new Date());
                 userToRegister.setUserLastUpdated(new Date());
+
+                System.out.println(userToRegister.getUserPassword());
 
                 userRepository.saveAndFlush(userToRegister);
                 messages.add("Success");
@@ -49,6 +52,30 @@ public class UserService {
             messages.add("Failed");
             messages.add("Passwords Not Match");
             return messages;
+        }
+    }
+
+    public List<String> validateLogin(User user) {
+
+        List<String> messages = new ArrayList<>();
+        List<User> userFromDb = userRepository.getUserByEmail(user.getUserEmail());
+
+        if (userFromDb.isEmpty()) {
+            messages.add("Failed");
+            messages.add("User Not Found.");
+            return messages;
+
+        } else {
+
+            if (bCryptPasswordEncoder.matches(user.getUserPassword(), userFromDb.get(0).getUserPassword())) {
+                messages.add("Success");
+                return messages;
+
+            } else {
+                messages.add("Failed");
+                messages.add(("Incorrect Password."));
+                return messages;
+            }
         }
     }
 }
