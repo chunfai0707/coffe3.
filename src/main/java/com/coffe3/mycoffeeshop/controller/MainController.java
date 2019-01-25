@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("ALL")
 @Controller
@@ -44,8 +46,9 @@ public class MainController {
         }
 
         List<Coffee> list = coffeeRepository.findAll();
+        List<Coffee> coffeeList = list.stream().sorted(Comparator.comparing(Coffee::getCoffeeLastUpdated).reversed()).collect(Collectors.toList()).subList(0, 8);
 
-        model.addAttribute("coffee", list);
+        model.addAttribute("coffee", coffeeList);
         model.addAttribute("userName", userName);
         model.addAttribute("newsletter", new Newsletter());
 

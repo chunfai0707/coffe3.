@@ -1,6 +1,5 @@
 package com.coffe3.mycoffeeshop.service;
 
-import com.coffe3.mycoffeeshop.config.WebMvcConfig;
 import com.coffe3.mycoffeeshop.domain.User;
 import com.coffe3.mycoffeeshop.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +16,6 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final WebMvcConfig webMvcConfig;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public List<User> getUserByEmail(String email) {
