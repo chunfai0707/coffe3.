@@ -34,7 +34,10 @@
                                     <li><a href="categories.html">Tea</a></li>
                                     <li><a href="categories.html">Desserts</a></li>
                                     <li><a href="contact.html">Contact</a></li>
-                                    <li><a href="login">Login</a></li>
+                                    <li><a href="login" th:if="${#lists.isEmpty(userName)}">Login</a>
+                                        <a href="logout" th:unless="${#lists.isEmpty(userName)}">Hi, <span
+                                                th:text="${userName[0]}"></span></a>
+                                    </li>
                                 </ul>
                             </nav>
                             <div class="header_extra ml-auto">

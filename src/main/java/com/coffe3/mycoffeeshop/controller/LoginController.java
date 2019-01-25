@@ -8,6 +8,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
+
 @SuppressWarnings("ALL")
 @Controller
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -56,13 +60,26 @@ public class LoginController {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String loginValidation(@ModelAttribute("user") User user, ModelMap model) {
+    public String loginValidation(@ModelAttribute("user") User user, ModelMap model, HttpServletRequest request) {
 
         String message = userService.validateLogin(user).get(0);
 
         if (message.equalsIgnoreCase("Success")) {
 
+            User userFromDb = userService.getUserByEmail(user.getUserEmail()).get(0);
+            List<String> users = (List<String>) request.getSession().getAttribute("userName");
+
+            if (users == null) {
+                users = new ArrayList<>();
+                request.getSession().setAttribute("userName", users);
+            }
+            users.add(userFromDb.getUserName());
+
+            request.getSession().setAttribute("userName", users);
             model.addAttribute("message", message);
+
+            System.out.println(users.get(0));
+
             return "redirect:/";
 
         } else {

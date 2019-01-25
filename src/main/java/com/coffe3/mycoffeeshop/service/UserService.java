@@ -20,6 +20,10 @@ public class UserService {
     private final WebMvcConfig webMvcConfig;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    public List<User> getUserByEmail(String email) {
+        return userRepository.getUserByEmail(email);
+    }
+
     public List<String> registerUser(User user) {
 
         String[] str = user.getUserPassword().split(",");

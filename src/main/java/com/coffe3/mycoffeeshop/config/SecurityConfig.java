@@ -32,19 +32,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers(
-                        "/resources/**",
-                        "/static/**",
-                        "/css/**",
-                        "/fonts/**",
-                        "/images/**",
-                        "/js/**",
-                        "/plugins/**",
-                        "/scss/**",
-                        "/styles/**",
-                        "/vendor.jquery/**",
-                        "/", "/register", "/signup").permitAll();
+        http.authorizeRequests().antMatchers(
+                "/resources/**",
+                "/static/**",
+                "/css/**",
+                "/fonts/**",
+                "/images/**",
+                "/js/**",
+                "/plugins/**",
+                "/scss/**",
+                "/styles/**",
+                "/vendor.jquery/**",
+                "/", "/register", "/signup").permitAll();
 //                    .anyRequest().authenticated()
 //                    .and()
 //                .formLogin()
@@ -52,7 +51,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                    .and()
 //                .logout().permitAll();
 
-        http.sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
+        http.sessionManagement().maximumSessions(2);
     }
+
 }
