@@ -78,11 +78,10 @@
                     <br>
                     <div th:switch="${message}">
                         <div th:case="'Success'" class="alert alert-success">
-                            <strong>Success! </strong> Registration Succesful.
-                            <span>Click <a href="login"><strong>Here</strong></a> to Login.</span>
+                            <strong>Success! </strong> Login Succesful.
                         </div>
                         <div th:case="'Failed'" class="alert alert-danger">
-                            <strong>Failure! </strong> Registration Failed.
+                            <strong>Failure! </strong> Login Failed.
                             <strong th:text="${errorMsg}"></strong>
                         </div>
                     </div>

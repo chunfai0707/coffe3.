@@ -33,7 +33,7 @@ public class UserService {
 
                 userToRegister.setUserName(user.getUserName());
                 userToRegister.setUserEmail(user.getUserEmail());
-                userToRegister.setUserPassword(bCryptPasswordEncoder.encode(user.getUserPassword()));
+                userToRegister.setUserPassword(bCryptPasswordEncoder.encode(str[0]));
                 userToRegister.setUserCreatedAt(new Date());
                 userToRegister.setUserLastUpdated(new Date());
 

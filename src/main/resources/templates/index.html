@@ -30,24 +30,11 @@
                             <nav class="main_nav">
                                 <ul>
                                     <li><a href="/">Home</a></li>
-                                    <li class="hassubs">
-                                        <a href="categories.html">Coffee</a>
-                                        <ul>
-                                            <li th:each="coffee : ${coffee}"><a href="categories.html"
-                                                                                th:text="${coffee.coffeeName}"></a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="hassubs">
-                                        <a href="categories.html">Tea</a>
-                                        <ul>
-                                            <li th:each="coffee : ${coffee}"><a href="categories.html"
-                                                                                th:text="${coffee.coffeeName}"></a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="#">Desserts</a></li>
+                                    <li><a href="categories.html">Coffee</a></li>
+                                    <li><a href="categories.html">Tea</a></li>
+                                    <li><a href="categories.html">Desserts</a></li>
                                     <li><a href="contact.html">Contact</a></li>
                                     <li><a href="login">Login</a></li>
-
                                 </ul>
                             </nav>
                             <div class="header_extra ml-auto">
@@ -481,8 +468,10 @@
                         <div class="newsletter_text"><p>Subsribe to our newsletter with your email to receive the latest
                             offers and promotions!</p></div>
                         <div class="newsletter_form_container">
-                            <form action="#" id="newsletter_form" class="newsletter_form">
-                                <input type="email" class="newsletter_input" required="required">
+                            <form action="#" th:action="@{/subscribe}" method="POST" id="newsletter_form"
+                                  class="newsletter_form" th:object="${newsletter}">
+                                <input type="email" class="newsletter_input" required="required"
+                                       th:field="*{newsletterEmail}">
                                 <button class="newsletter_button trans_200"><span>Subscribe</span></button>
                             </form>
                         </div>
