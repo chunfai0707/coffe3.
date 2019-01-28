@@ -3,6 +3,8 @@ package com.coffe3.mycoffeeshop.service;
 import com.coffe3.mycoffeeshop.domain.User;
 import com.coffe3.mycoffeeshop.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserService {
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -36,13 +40,15 @@ public class UserService {
                 userToRegister.setUserName(user.getUserName());
                 userToRegister.setUserEmail(user.getUserEmail());
                 userToRegister.setUserPassword(bCryptPasswordEncoder.encode(str[0]));
+                userToRegister.setUserEnabled(1);
                 userToRegister.setUserCreatedAt(new Date());
                 userToRegister.setUserLastUpdated(new Date());
 
-                System.out.println(userToRegister.getUserPassword());
-
                 userRepository.saveAndFlush(userToRegister);
                 messages.add("Success");
+
+                logger.info("User {} registered.", userToRegister.getUserEmail());
+
                 return messages;
 
             } else {
@@ -54,30 +60,6 @@ public class UserService {
             messages.add("Failed");
             messages.add("Passwords Not Match");
             return messages;
-        }
-    }
-
-    public List<String> validateLogin(User user) {
-
-        List<String> messages = new ArrayList<>();
-        List<User> userFromDb = userRepository.getUserByEmail(user.getUserEmail());
-
-        if (userFromDb.isEmpty()) {
-            messages.add("Failed");
-            messages.add("User Not Found.");
-            return messages;
-
-        } else {
-
-            if (bCryptPasswordEncoder.matches(user.getUserPassword(), userFromDb.get(0).getUserPassword())) {
-                messages.add("Success");
-                return messages;
-
-            } else {
-                messages.add("Failed");
-                messages.add(("Incorrect Password."));
-                return messages;
-            }
         }
     }
 }
