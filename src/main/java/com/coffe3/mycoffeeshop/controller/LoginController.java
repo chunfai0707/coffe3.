@@ -7,10 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.web.servlet.ModelAndView;
 
 @SuppressWarnings("ALL")
 @Controller
@@ -50,46 +47,25 @@ public class LoginController {
     @GetMapping(value = "/login")
     public String login(ModelMap model,
                         @RequestParam(value = "message", required = false) String message,
-                        @RequestParam(value = "errormsg", required = false) String errorMsg) {
+                        @RequestParam(value = "errorMsg", required = false) String errorMsg) {
 
         model.addAttribute("user", new User());
         model.addAttribute("message", message);
-        model.addAttribute("errormsg", errorMsg);
+        model.addAttribute("errorMsg", errorMsg);
 
         return "login";
     }
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String loginValidation(@ModelAttribute("user") User user, ModelMap model, HttpServletRequest request) {
+    @RequestMapping(value = {"/accessdenied"}, method = RequestMethod.GET)
+    public ModelAndView accessDenied() {
+        ModelAndView model = new ModelAndView();
 
-        String message = userService.validateLogin(user).get(0);
+        model.addObject("user", new User());
+        model.addObject("errorMsg", "Login Failed.");
+        model.addObject("message", "Failed");
 
-        if (message.equalsIgnoreCase("Success")) {
+        model.setViewName("/login");
 
-            User userFromDb = userService.getUserByEmail(user.getUserEmail()).get(0);
-            List<String> users = (List<String>) request.getSession().getAttribute("userName");
-
-            if (users == null) {
-                users = new ArrayList<>();
-                request.getSession().setAttribute("userName", users);
-            }
-            users.add(userFromDb.getUserName());
-
-            request.getSession().setAttribute("userName", users);
-            model.addAttribute("message", message);
-
-            System.out.println(users.get(0));
-
-            return "redirect:/";
-
-        } else {
-
-            String errorMsg = userService.validateLogin(user).get(1);
-            model.addAttribute("message", message);
-            model.addAttribute("errorMsg", errorMsg);
-            return "login";
-
-        }
+        return model;
     }
-
 }

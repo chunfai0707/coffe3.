@@ -34,9 +34,9 @@
                                     <li><a href="/coffee">Tea</a></li>
                                     <li><a href="/coffee">Desserts</a></li>
                                     <li><a href="contact.html">Contact</a></li>
-                                    <li><a href="login" th:if="${#lists.isEmpty(userName)}">Login</a>
-                                        <a href="logout" th:unless="${#lists.isEmpty(userName)}">Hi, <span
-                                                th:text="${userName[0]}"></span></a>
+                                    <li><a href="login" th:if="${currentUser.userName == null}">Login</a>
+                                        <a href="logout" th:unless="${currentUser.userName == null}">Hi, <span
+                                                th:text="${currentUser.userName}"></span></a>
                                     </li>
                                 </ul>
                             </nav>

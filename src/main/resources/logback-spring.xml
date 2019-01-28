@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+    <springProfile name="dev">
+
+        <property name="log_home" value="/home/chunfai/logs/coffe3"/>
+        <property name="log_file" value="/home/chunfai/logs/coffe3/coffe3.log"/>
+        <property name="log_file_name" value="${log_file}.%d{yyyy-MM-dd}.log"/>
+        <property name="log_pattern_file" value="%d{yyyy-MM-dd HH:mm:ss, GMT+8} - %msg%n"/>
+
+        <appender name="rolling_file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <encoder>
+                <pattern>${log_pattern_file}</pattern>
+            </encoder>
+            <file>${log_file}</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>${log_file_name}.%i</fileNamePattern>
+                <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                    <maxFileSize>10MB</maxFileSize>
+                </timeBasedFileNamingAndTriggeringPolicy>
+            </rollingPolicy>
+        </appender>
+
+    </springProfile>
+
+    <!--<springProfile name="uat">-->
+    <!--<property name="log_home" value="/applogs/revpaybatch/logs"/>-->
+    <!--<property name="log_file" value="/applogs/revpaybatch/logs/revpaybatch.log"/>-->
+    <!--<property name="log_file_name" value="${log_file}.%d{yyyy-MM-dd}.log"/>-->
+    <!--<property name="log_pattern_file" value="%d{yyyy-MM-dd HH:mm:ss, GMT+8} - %msg%n"/>-->
+
+    <!--<appender name="rolling_file" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+    <!--<encoder>-->
+    <!--<pattern>${log_pattern_file}</pattern>-->
+    <!--</encoder>-->
+    <!--<file>${log_file}</file>-->
+    <!--<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
+    <!--<fileNamePattern>${log_file_name}.%i</fileNamePattern>-->
+    <!--<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">-->
+    <!--<maxFileSize>10MB</maxFileSize>-->
+    <!--</timeBasedFileNamingAndTriggeringPolicy>-->
+    <!--</rollingPolicy>-->
+    <!--</appender>-->
+
+    <!--&lt;!&ndash;<logger name="org.springframework" level="ERROR">&ndash;&gt;-->
+    <!--&lt;!&ndash;<appender-ref ref="rolling_file"/>&ndash;&gt;-->
+    <!--&lt;!&ndash;</logger>&ndash;&gt;-->
+
+    <!--&lt;!&ndash;<logger name="com.rh" level="DEBUG">&ndash;&gt;-->
+    <!--&lt;!&ndash;<appender-ref ref="rolling_file"/>&ndash;&gt;-->
+    <!--&lt;!&ndash;</logger>&ndash;&gt;-->
+
+    <!--&lt;!&ndash;<logger name="com.jcraft" level="DEBUG">&ndash;&gt;-->
+    <!--&lt;!&ndash;<appender-ref ref="rolling_file"/>&ndash;&gt;-->
+    <!--&lt;!&ndash;</logger>&ndash;&gt;-->
+
+    <!--</springProfile>-->
+
+    <!--<springProfile name="prd">-->
+    <!--<property name="log_home" value="/applogs/revpaybatch/logs"/>-->
+    <!--<property name="log_file" value="/applogs/revpaybatch/logs/revpaybatch.log"/>-->
+    <!--<property name="log_file_name" value="${log_file}.%d{yyyy-MM-dd}.log"/>-->
+    <!--<property name="log_pattern_file" value="%d{yyyy-MM-dd HH:mm:ss, GMT+8} - %msg%n"/>-->
+
+    <!--<appender name="rolling_file" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+    <!--<encoder>-->
+    <!--<pattern>${log_pattern_file}</pattern>-->
+    <!--</encoder>-->
+    <!--<file>${log_file}</file>-->
+    <!--<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
+    <!--<fileNamePattern>${log_file_name}.%i</fileNamePattern>-->
+    <!--<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">-->
+    <!--<maxFileSize>10MB</maxFileSize>-->
+    <!--</timeBasedFileNamingAndTriggeringPolicy>-->
+    <!--</rollingPolicy>-->
+    <!--</appender>-->
+
+    <!--&lt;!&ndash;<logger name="org.springframework" level="ERROR">&ndash;&gt;-->
+    <!--&lt;!&ndash;<appender-ref ref="rolling_file"/>&ndash;&gt;-->
+    <!--&lt;!&ndash;</logger>&ndash;&gt;-->
+
+    <!--&lt;!&ndash;<logger name="com.rh" level="DEBUG">&ndash;&gt;-->
+    <!--&lt;!&ndash;<appender-ref ref="rolling_file"/>&ndash;&gt;-->
+    <!--&lt;!&ndash;</logger>&ndash;&gt;-->
+
+    <!--&lt;!&ndash;<logger name="com.jcraft" level="DEBUG">&ndash;&gt;-->
+    <!--&lt;!&ndash;<appender-ref ref="rolling_file"/>&ndash;&gt;-->
+    <!--&lt;!&ndash;</logger>&ndash;&gt;-->
+
+    <!--</springProfile>-->
+
+    <logger name="org.springframework" level="ERROR">
+        <appender-ref ref="rolling_file"/>
+    </logger>
+
+    <logger name="com.rh" level="DEBUG">
+        <appender-ref ref="rolling_file"/>
+    </logger>
+
+    <logger name="com.jcraft" level="DEBUG">
+        <appender-ref ref="rolling_file"/>
+    </logger>
+
+</configuration>

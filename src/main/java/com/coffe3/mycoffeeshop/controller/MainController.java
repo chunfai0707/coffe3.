@@ -3,11 +3,16 @@ package com.coffe3.mycoffeeshop.controller;
 import com.coffe3.mycoffeeshop.config.WebMvcConfig;
 import com.coffe3.mycoffeeshop.domain.Coffee;
 import com.coffe3.mycoffeeshop.domain.Newsletter;
+import com.coffe3.mycoffeeshop.domain.User;
 import com.coffe3.mycoffeeshop.repository.CoffeeRepository;
 import com.coffe3.mycoffeeshop.service.NewsletterService;
 import com.coffe3.mycoffeeshop.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +32,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class MainController {
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     private final CoffeeRepository coffeeRepository;
     private final UserService userService;
     private final WebMvcConfig webMvcConfig;
@@ -35,21 +42,36 @@ public class MainController {
     @GetMapping({"/"})
     public String hello(ModelMap model, HttpSession session) {
 
-        List<String> userName = (List<String>) session.getAttribute("userName");
-        System.out.println(session.getId());
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        if (userName == null) {
-            userName = new ArrayList<>();
+        List<Coffee> coffeeList = new ArrayList<>();
+        List<User> users = userService.getUserByEmail(auth.getName());
+        User currentUser = new User();
 
-        } else {
-            System.out.println(userName);
+        logger.info("Current Session: " + session.getId());
+
+        if (!users.isEmpty()) {
+
+            currentUser = users.get(0);
+
+            logger.info("---------------User Info--------------------");
+            logger.info("Current User Name: " + currentUser.getUserName());
+            logger.info("Current User Email: " + currentUser.getUserEmail());
+            logger.info("Current User Role: " + currentUser.getRoles());
+            logger.info("--------------------------------------------");
+
+            session.setAttribute("currentUser", currentUser);
         }
 
         List<Coffee> list = coffeeRepository.findAll();
-        List<Coffee> coffeeList = list.stream().sorted(Comparator.comparing(Coffee::getCoffeeLastUpdated).reversed()).collect(Collectors.toList()).subList(0, 8);
+        if (list.size() > 8) {
+            coffeeList = list.stream().sorted(Comparator.comparing(Coffee::getCoffeeLastUpdated).reversed()).collect(Collectors.toList()).subList(0, 8);
+        } else {
+            coffeeList = list.stream().sorted(Comparator.comparing(Coffee::getCoffeeLastUpdated).reversed()).collect(Collectors.toList()).subList(0, list.size());
+        }
 
         model.addAttribute("coffee", coffeeList);
-        model.addAttribute("userName", userName);
+        model.addAttribute("currentUser", currentUser);
         model.addAttribute("newsletter", new Newsletter());
 
         return "index";
