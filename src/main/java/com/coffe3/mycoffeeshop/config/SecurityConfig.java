@@ -2,9 +2,11 @@ package com.coffe3.mycoffeeshop.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -38,6 +40,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "INNER JOIN coffe3_role r ON (ur.role_id=r.role_id) " +
             "WHERE u.user_email=?";
 
+    private final String[] RESOURCES = new String[]{"/", "/register", "/signup", "/coffee/**", "/product",
+            "/subscribe", "/static/**", "/css/**", "/fonts/**", "/images/**", "/js/**", "/plugins/**", "/scss/**", "/styles/**", "/vendor.jquery/**"};
+
     @Override
     protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
         auth.jdbcAuthentication()
@@ -45,14 +50,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authoritiesByUsernameQuery(ROLE_QUERY)
                 .passwordEncoder(new BCryptPasswordEncoder())
                 .dataSource(dataSource);
+    }
 
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/resources/**");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/", "/register", "/signup", "/coffee", "/subscribe").permitAll()
-                .antMatchers("/static/**", "/css/**", "/fonts/**", "/images/**", "/js/**", "/plugins/**", "/scss/**", "/styles/**", "/vendor.jquery/**").permitAll()
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+                .antMatchers(RESOURCES).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -72,9 +81,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutUrl("logout")
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
-
                 .and().exceptionHandling().accessDeniedPage("/accessdenied");
-        ;
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
         http.sessionManagement().maximumSessions(2);
