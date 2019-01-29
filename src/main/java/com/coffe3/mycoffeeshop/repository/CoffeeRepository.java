@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CoffeeRepository extends JpaRepository<Coffee, Integer> {
+    Coffee findCoffeeByCoffeeId(Integer coffeeId);
 }

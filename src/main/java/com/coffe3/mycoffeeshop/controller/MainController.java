@@ -1,6 +1,5 @@
 package com.coffe3.mycoffeeshop.controller;
 
-import com.coffe3.mycoffeeshop.config.WebMvcConfig;
 import com.coffe3.mycoffeeshop.domain.Coffee;
 import com.coffe3.mycoffeeshop.domain.Newsletter;
 import com.coffe3.mycoffeeshop.domain.User;
@@ -36,7 +35,6 @@ public class MainController {
 
     private final CoffeeRepository coffeeRepository;
     private final UserService userService;
-    private final WebMvcConfig webMvcConfig;
     private final NewsletterService newsletterService;
 
     @GetMapping({"/"})
@@ -60,8 +58,9 @@ public class MainController {
             logger.info("Current User Role: " + currentUser.getRoles());
             logger.info("--------------------------------------------");
 
-            session.setAttribute("currentUser", currentUser);
         }
+
+        session.setAttribute("currentUser", currentUser);
 
         List<Coffee> list = coffeeRepository.findAll();
         if (list.size() > 8) {
