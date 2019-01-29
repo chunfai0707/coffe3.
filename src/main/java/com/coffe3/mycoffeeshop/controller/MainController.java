@@ -3,6 +3,7 @@ package com.coffe3.mycoffeeshop.controller;
 import com.coffe3.mycoffeeshop.domain.Coffee;
 import com.coffe3.mycoffeeshop.domain.Newsletter;
 import com.coffe3.mycoffeeshop.domain.User;
+import com.coffe3.mycoffeeshop.domain.custom.CustomUser;
 import com.coffe3.mycoffeeshop.repository.CoffeeRepository;
 import com.coffe3.mycoffeeshop.service.NewsletterService;
 import com.coffe3.mycoffeeshop.service.UserService;
@@ -44,18 +45,28 @@ public class MainController {
 
         List<Coffee> coffeeList = new ArrayList<>();
         List<User> users = userService.getUserByEmail(auth.getName());
-        User currentUser = new User();
+
+        CustomUser currentUser = (CustomUser) session.getAttribute("currentUser") == null ? new CustomUser() : (CustomUser) session.getAttribute("currentUser");
+
+        List<Coffee> cart = currentUser.getCoffeeCart() == null ? new ArrayList<>() : currentUser.getCoffeeCart();
+        currentUser.setCoffeeCart(cart);
 
         logger.info("Current Session: " + session.getId());
 
         if (!users.isEmpty()) {
 
-            currentUser = users.get(0);
+            currentUser.setUserId(users.get(0).getUserId());
+            currentUser.setUserName(users.get(0).getUserName());
+            currentUser.setUserEmail(users.get(0).getUserEmail());
+            currentUser.setRoles(users.get(0).getRoles());
+            currentUser.setCoffeeCart(cart);
+
 
             logger.info("---------------User Info--------------------");
             logger.info("Current User Name: " + currentUser.getUserName());
             logger.info("Current User Email: " + currentUser.getUserEmail());
             logger.info("Current User Role: " + currentUser.getRoles());
+            logger.info("Current Cart: " + currentUser.getCoffeeCart().size());
             logger.info("--------------------------------------------");
 
         }
@@ -78,7 +89,6 @@ public class MainController {
 
     @RequestMapping(value = "/subscribe", method = RequestMethod.POST)
     public String subscribeNewsletter(@ModelAttribute("newsletter") Newsletter newsletter) {
-
         newsletterService.subscribeNewsletter(newsletter);
         return "redirect:/";
     }
