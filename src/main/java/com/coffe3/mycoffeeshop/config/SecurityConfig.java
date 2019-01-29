@@ -40,7 +40,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "INNER JOIN coffe3_role r ON (ur.role_id=r.role_id) " +
             "WHERE u.user_email=?";
 
-    private final String[] RESOURCES = new String[]{"/", "/register", "/signup", "/coffee/**", "/product", "/subscribe", "/static/**", "/css/**", "/fonts/**", "/images/**", "/js/**", "/plugins/**", "/scss/**", "/styles/**", "/vendor.jquery/**"};
+    private final String[] RESOURCES = new String[]{"/", "/register", "/signup", "/coffee/**", "/product",
+            "/subscribe", "/static/**", "/css/**", "/fonts/**", "/images/**", "/js/**", "/plugins/**", "/scss/**", "/styles/**", "/vendor.jquery/**"};
 
     @Override
     protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
@@ -53,9 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web
-                .ignoring()
-                .antMatchers("/resources/**");
+        web.ignoring().antMatchers("/resources/**");
     }
 
     @Override

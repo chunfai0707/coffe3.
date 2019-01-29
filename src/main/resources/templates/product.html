@@ -272,7 +272,8 @@
                             <div class="product_image"><img th:src="'../' + ${coffee.coffeeImgUrl}" alt="" height="320"
                                                             width="320"></div>
                             <div class="product_content">
-                                <div class="product_title"><a href="product.html" th:text="${coffee.coffeeName}"></a>
+                                <div class="product_title"><a th:href="@{'/coffee/' + ${coffee.coffeeId}}"
+                                                              th:text="${coffee.coffeeName}"></a>
                                 </div>
                                 <div class="product_price" th:text="${coffee.coffeePrice}"></div>
                             </div>
