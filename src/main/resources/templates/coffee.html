@@ -42,7 +42,7 @@
                             </nav>
                             <div class="header_extra ml-auto">
                                 <div class="shopping_cart">
-                                    <a href="cart.html">
+                                    <a href="/cart">
                                         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
                                              viewBox="0 0 489 489" style="enable-background:new 0 0 489 489;"
                                              xml:space="preserve">
@@ -54,7 +54,10 @@
 													c0,7.5,6,13.5,13.5,13.5s13.5-6,13.5-13.5v-41h45.2l26.9,302.3C412.8,445.2,392.1,462,366.8,462z"></path>
 											</g>
 										</svg>
-                                        <div>Cart <span>(0)</span></div>
+                                        <div th:if="${currentUser.userName == null}">Cart</div>
+                                        <div th:unless="${currentUser.userName == null}">Cart <span
+                                                th:text="'(' + ${#lists.size(currentUser.coffeeCart)} + ')'"></span>
+                                        </div>
                                     </a>
                                 </div>
                                 <div class="search">
@@ -238,12 +241,10 @@
                         <div class="product" th:each="coffee : ${coffee}">
                             <div class="product_image"><img alt="" height="300" width="350"
                                                             th:src="@{${coffee.coffeeImgUrl}}"/></div>
-                            <div class="product_extra product_new"><a href="categories.html">New</a></div>
                             <div class="product_content">
                                 <div class="product_title"><a th:href="@{'/coffee/' + ${coffee.coffeeId}}"
-                                                              th:text="${coffee.coffeeName}"></a>
-                                </div>
-                                <div class="product_price"><span>RM </span><span th:text="${coffee.coffeePrice}"></span>
+                                                              th:text="${coffee.coffeeName}"></a></div>
+                                <div class="product_price" th:text="'RM ' + ${coffee.coffeePrice}">
                                 </div>
                             </div>
                         </div>

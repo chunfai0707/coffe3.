@@ -2,7 +2,7 @@ package com.coffe3.mycoffeeshop.controller;
 
 import com.coffe3.mycoffeeshop.domain.Coffee;
 import com.coffe3.mycoffeeshop.domain.Newsletter;
-import com.coffe3.mycoffeeshop.domain.User;
+import com.coffe3.mycoffeeshop.domain.custom.CustomUser;
 import com.coffe3.mycoffeeshop.repository.CoffeeRepository;
 import com.coffe3.mycoffeeshop.service.CoffeeService;
 import lombok.RequiredArgsConstructor;
@@ -36,15 +36,18 @@ public class CoffeeController {
     public String listAllCoffee(ModelMap model, HttpSession session) {
 
         List<Coffee> list = coffeeRepository.findAll();
-        User currentUser = (User) session.getAttribute("currentUser");
+        CustomUser currentUser = (CustomUser) session.getAttribute("currentUser");
 
         if (!(currentUser == null)) {
             logger.info("---------------User Info--------------------");
             logger.info("Current Session: " + session.getId());
             logger.info("Current User: " + currentUser.getUserName());
             logger.info("Current User Email: " + currentUser.getUserEmail());
+            logger.info("Current Cart :" + currentUser.getCoffeeCart().size());
             logger.info("--------------------------------------------");
         }
+
+        session.setAttribute("currentUser", currentUser);
 
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("coffee", list);
@@ -56,13 +59,14 @@ public class CoffeeController {
     @RequestMapping(value = "/coffee/{coffeeId}", method = RequestMethod.GET)
     public String getCoffeeById(@PathVariable Integer coffeeId, ModelMap model, HttpSession session) {
 
-        User currentUser = (User) session.getAttribute("currentUser");
+        CustomUser currentUser = (CustomUser) session.getAttribute("currentUser");
 
         if (!(currentUser == null)) {
             logger.info("---------------User Info--------------------");
             logger.info("Current Session: " + session.getId());
             logger.info("Current User: " + currentUser.getUserName());
             logger.info("Current User Email: " + currentUser.getUserEmail());
+            logger.info("Current Cart :" + currentUser.getCoffeeCart().size());
             logger.info("--------------------------------------------");
         }
 
@@ -77,6 +81,8 @@ public class CoffeeController {
         } else {
             relatedList = list.stream().sorted(Comparator.comparing(Coffee::getCoffeeLastUpdated).reversed()).collect(Collectors.toList()).subList(0, list.size());
         }
+
+        session.setAttribute("currentUser", currentUser);
 
         model.addAttribute("coffee", coffee);
         model.addAttribute("related", relatedList);
