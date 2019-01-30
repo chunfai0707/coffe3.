@@ -61,7 +61,7 @@ public class LoginController {
         ModelAndView model = new ModelAndView();
 
         model.addObject("user", new User());
-        model.addObject("errorMsg", "Login Failed.");
+        model.addObject("errorMsg", "Wrong Email or Password.");
         model.addObject("message", "Failed");
 
         model.setViewName("/login");

@@ -5,8 +5,10 @@ import com.coffe3.mycoffeeshop.domain.Newsletter;
 import com.coffe3.mycoffeeshop.domain.User;
 import com.coffe3.mycoffeeshop.domain.custom.CustomUser;
 import com.coffe3.mycoffeeshop.repository.CoffeeRepository;
+import com.coffe3.mycoffeeshop.service.CoffeeService;
 import com.coffe3.mycoffeeshop.service.NewsletterService;
 import com.coffe3.mycoffeeshop.service.UserService;
+import com.coffe3.mycoffeeshop.tools.CommUtils;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,9 +25,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @SuppressWarnings("ALL")
 @Controller
@@ -35,6 +35,7 @@ public class MainController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final CoffeeRepository coffeeRepository;
+    private final CoffeeService coffeeService;
     private final UserService userService;
     private final NewsletterService newsletterService;
 
@@ -43,7 +44,7 @@ public class MainController {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        List<Coffee> coffeeList = new ArrayList<>();
+        List<Coffee> latestList = new ArrayList<>();
         List<User> users = userService.getUserByEmail(auth.getName());
 
         CustomUser currentUser = (CustomUser) session.getAttribute("currentUser") == null ? new CustomUser() : (CustomUser) session.getAttribute("currentUser");
@@ -51,7 +52,7 @@ public class MainController {
         List<Coffee> cart = currentUser.getCoffeeCart() == null ? new ArrayList<>() : currentUser.getCoffeeCart();
         currentUser.setCoffeeCart(cart);
 
-        logger.info("Current Session: " + session.getId());
+        CommUtils.logUserInfo(logger, currentUser, session);
 
         if (!users.isEmpty()) {
 
@@ -61,26 +62,15 @@ public class MainController {
             currentUser.setRoles(users.get(0).getRoles());
             currentUser.setCoffeeCart(cart);
 
-
-            logger.info("---------------User Info--------------------");
-            logger.info("Current User Name: " + currentUser.getUserName());
-            logger.info("Current User Email: " + currentUser.getUserEmail());
-            logger.info("Current User Role: " + currentUser.getRoles());
-            logger.info("Current Cart: " + currentUser.getCoffeeCart().size());
-            logger.info("--------------------------------------------");
-
+            CommUtils.logUserInfo(logger, currentUser, session);
         }
 
         session.setAttribute("currentUser", currentUser);
 
         List<Coffee> list = coffeeRepository.findAll();
-        if (list.size() > 8) {
-            coffeeList = list.stream().sorted(Comparator.comparing(Coffee::getCoffeeLastUpdated).reversed()).collect(Collectors.toList()).subList(0, 8);
-        } else {
-            coffeeList = list.stream().sorted(Comparator.comparing(Coffee::getCoffeeLastUpdated).reversed()).collect(Collectors.toList()).subList(0, list.size());
-        }
+        latestList = coffeeService.showLatestItem(list);
 
-        model.addAttribute("coffee", coffeeList);
+        model.addAttribute("coffee", latestList);
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("newsletter", new Newsletter());
 
