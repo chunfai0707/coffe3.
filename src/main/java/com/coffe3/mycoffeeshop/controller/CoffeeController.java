@@ -5,6 +5,7 @@ import com.coffe3.mycoffeeshop.domain.Newsletter;
 import com.coffe3.mycoffeeshop.domain.custom.CustomUser;
 import com.coffe3.mycoffeeshop.repository.CoffeeRepository;
 import com.coffe3.mycoffeeshop.service.CoffeeService;
+import com.coffe3.mycoffeeshop.tools.CommUtils;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,9 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @SuppressWarnings("ALL")
 @Controller
@@ -35,20 +34,12 @@ public class CoffeeController {
     @GetMapping({"/coffee"})
     public String listAllCoffee(ModelMap model, HttpSession session) {
 
-        List<Coffee> list = coffeeRepository.findAll();
         CustomUser currentUser = (CustomUser) session.getAttribute("currentUser");
+        CommUtils.logUserInfo(logger, currentUser, session);
 
-        if (!(currentUser == null)) {
-            logger.info("---------------User Info--------------------");
-            logger.info("Current Session: " + session.getId());
-            logger.info("Current User: " + currentUser.getUserName());
-            logger.info("Current User Email: " + currentUser.getUserEmail());
-            logger.info("Current Cart :" + currentUser.getCoffeeCart().size());
-            logger.info("--------------------------------------------");
-        }
+        List<Coffee> list = coffeeRepository.findAll();
 
         session.setAttribute("currentUser", currentUser);
-
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("coffee", list);
         model.addAttribute("newsletter", new Newsletter());
@@ -60,30 +51,15 @@ public class CoffeeController {
     public String getCoffeeById(@PathVariable Integer coffeeId, ModelMap model, HttpSession session) {
 
         CustomUser currentUser = (CustomUser) session.getAttribute("currentUser");
-
-        if (!(currentUser == null)) {
-            logger.info("---------------User Info--------------------");
-            logger.info("Current Session: " + session.getId());
-            logger.info("Current User: " + currentUser.getUserName());
-            logger.info("Current User Email: " + currentUser.getUserEmail());
-            logger.info("Current Cart :" + currentUser.getCoffeeCart().size());
-            logger.info("--------------------------------------------");
-        }
+        CommUtils.logUserInfo(logger, currentUser, session);
 
         Coffee coffee = coffeeRepository.findCoffeeByCoffeeId(coffeeId);
         List<Coffee> list = coffeeRepository.findAll();
+
         List<Coffee> relatedList = new ArrayList<>();
-
-        list.remove(coffee);
-
-        if (list.size() > 4) {
-            relatedList = list.stream().sorted(Comparator.comparing(Coffee::getCoffeeLastUpdated).reversed()).collect(Collectors.toList()).subList(0, 4);
-        } else {
-            relatedList = list.stream().sorted(Comparator.comparing(Coffee::getCoffeeLastUpdated).reversed()).collect(Collectors.toList()).subList(0, list.size());
-        }
+        relatedList = coffeeService.showRelatedItems(coffee, list);
 
         session.setAttribute("currentUser", currentUser);
-
         model.addAttribute("coffee", coffee);
         model.addAttribute("related", relatedList);
         model.addAttribute("currentUser", currentUser);
