@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 @SuppressWarnings("ALL")
 @Controller
@@ -46,33 +47,25 @@ public class LoginController {
     @GetMapping(value = "/login")
     public String login(ModelMap model,
                         @RequestParam(value = "message", required = false) String message,
-                        @RequestParam(value = "errormsg", required = false) String errorMsg) {
+                        @RequestParam(value = "errorMsg", required = false) String errorMsg) {
 
         model.addAttribute("user", new User());
         model.addAttribute("message", message);
-        model.addAttribute("errormsg", errorMsg);
+        model.addAttribute("errorMsg", errorMsg);
 
         return "login";
     }
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String loginValidation(@ModelAttribute("user") User user, ModelMap model) {
+    @RequestMapping(value = {"/accessdenied"}, method = RequestMethod.GET)
+    public ModelAndView accessDenied() {
+        ModelAndView model = new ModelAndView();
 
-        String message = userService.validateLogin(user).get(0);
+        model.addObject("user", new User());
+        model.addObject("errorMsg", "Login Failed.");
+        model.addObject("message", "Failed");
 
-        if (message.equalsIgnoreCase("Success")) {
+        model.setViewName("/login");
 
-            model.addAttribute("message", message);
-            return "redirect:/";
-
-        } else {
-
-            String errorMsg = userService.validateLogin(user).get(1);
-            model.addAttribute("message", message);
-            model.addAttribute("errorMsg", errorMsg);
-            return "login";
-
-        }
+        return model;
     }
-
 }

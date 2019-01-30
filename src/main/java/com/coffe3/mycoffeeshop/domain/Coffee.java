@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -14,7 +15,9 @@ import java.util.Date;
 @Data
 @Entity
 @Table(name = "coffe3_coffee")
-public class Coffee {
+public class Coffee implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @Column(name = "coffee_id")
@@ -27,6 +30,8 @@ public class Coffee {
     private String coffeeImgUrl;
     @Column(name = "coffee_description")
     private String coffeeDescription;
+    @Column(name = "coffee_available")
+    private Integer coffeeAvailable;
     @Column(name = "coffee_created_at")
     private Date coffeeCreatedAt;
     @Column(name = "coffee_last_updated")

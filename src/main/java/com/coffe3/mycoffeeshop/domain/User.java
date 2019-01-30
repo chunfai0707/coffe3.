@@ -8,7 +8,9 @@ package com.coffe3.mycoffeeshop.domain;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Fatal
@@ -17,7 +19,9 @@ import java.util.Date;
 @Entity
 @Table(name = "coffe3_user")
 
-public class User {
+public class User implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,11 +33,15 @@ public class User {
     private String userEmail;
     @Column(name = "user_password")
     private String userPassword;
+    @Column(name = "user_enabled")
+    private Integer userEnabled;
     @Column(name = "user_created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date userCreatedAt;
     @Column(name = "user_last_updated")
     @Temporal(TemporalType.TIMESTAMP)
     private Date userLastUpdated;
-
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "coffe3_user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private List<Role> roles;
 }
