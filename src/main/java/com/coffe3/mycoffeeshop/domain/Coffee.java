@@ -30,6 +30,8 @@ public class Coffee implements Serializable {
     private String coffeeImgUrl;
     @Column(name = "coffee_description")
     private String coffeeDescription;
+    @Column(name = "coffee_available")
+    private Integer coffeeAvailable;
     @Column(name = "coffee_created_at")
     private Date coffeeCreatedAt;
     @Column(name = "coffee_last_updated")

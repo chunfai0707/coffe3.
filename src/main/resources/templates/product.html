@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=0.9">
     <link rel="stylesheet" type="text/css" th:href="@{../styles/bootstrap4/bootstrap.min.css}">
-    <link href="@{../plugins/font-awesome-4.7.0/css/font-awesome.min.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{../plugins/font-awesome-4.7.0/css/font-awesome.min.css}" rel="stylesheet" type="text/css">
     <link rel="stylesheet" type="text/css" th:href="@{../plugins/OwlCarousel2-2.2.1/owl.carousel.css}">
     <link rel="stylesheet" type="text/css" th:href="@{../plugins/OwlCarousel2-2.2.1/owl.theme.default.css}">
     <link rel="stylesheet" type="text/css" th:href="@{../plugins/OwlCarousel2-2.2.1/animate.css}">
@@ -35,7 +35,7 @@
                                     <li><a href="/coffee">Tea</a></li>
                                     <li><a href="/coffee">Desserts</a></li>
                                     <li><a href="contact.html">Contact</a></li>
-                                    <li><a href="login" th:if="${currentUser.userName == null}">Login</a>
+                                    <li><a href="/login" th:if="${currentUser.userName == null}">Login</a>
                                         <a href="logout" th:unless="${currentUser.userName == null}">Hi, <span
                                                 th:text="${currentUser.userName}"></span></a>
                                     </li>
@@ -43,7 +43,7 @@
                             </nav>
                             <div class="header_extra ml-auto">
                                 <div class="shopping_cart">
-                                    <a href="cart.html">
+                                    <a href="/cart">
                                         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
                                              viewBox="0 0 489 489" style="enable-background:new 0 0 489 489;"
                                              xml:space="preserve">
@@ -55,7 +55,10 @@
 													c0,7.5,6,13.5,13.5,13.5s13.5-6,13.5-13.5v-41h45.2l26.9,302.3C412.8,445.2,392.1,462,366.8,462z"></path>
 											</g>
 										</svg>
-                                        <div>Cart <span>(0)</span></div>
+                                        <div th:if="${currentUser.userName == null}">Cart</div>
+                                        <div th:unless="${currentUser.userName == null}">Cart <span
+                                                th:text="'(' + ${#lists.size(currentUser.coffeeCart)} + ')'"></span>
+                                        </div>
                                     </a>
                                 </div>
                                 <div class="search">
@@ -221,31 +224,36 @@
                         <!-- In Stock -->
                         <div class="in_stock_container">
                             <div class="availability">Availability:</div>
-                            <span>In Stock</span>
+                            <span style="color:green" th:if="${coffee.coffeeAvailable == 1}">In Stock</span>
+                            <span style="color:red" th:unless="${coffee.coffeeAvailable == 1}">Out of Stock</span>
                         </div>
                         <div class="details_text">
                             <p th:text="${coffee.coffeeDescription}"></p>
                         </div>
 
                         <!-- Product Quantity -->
-                        <div class="product_quantity_container">
-                            <div class="product_quantity clearfix">
-                                <span>Qty</span>
-                                <input id="quantity_input" type="text" pattern="[0-9]*" value="1">
-                                <div class="quantity_buttons">
-                                    <div id="quantity_inc_button" class="quantity_inc quantity_control"><i
-                                            class="fa fa-chevron-up" aria-hidden="true"></i></div>
-                                    <div id="quantity_dec_button" class="quantity_dec quantity_control"><i
-                                            class="fa fa-chevron-down" aria-hidden="true"></i></div>
+                        <form th:action="@{/addtocart}" method="get" th:if="${coffee.coffeeAvailable == 1}">
+                            <div class="product_quantity_container">
+                                <div class="product_quantity clearfix">
+                                    <span>Qty</span>
+                                    <input id="quantity_input" name="amount" type="text" pattern="[0-9]*" value="1">
+                                    <input type="hidden" id="coffeeId" name="coffee" th:value="${coffee.coffeeId}">
+                                    <div class="quantity_buttons">
+                                        <div id="quantity_inc_button" class="quantity_inc quantity_control"><i
+                                                class="fa fa-chevron-up" aria-hidden="true"></i></div>
+                                        <div id="quantity_dec_button" class="quantity_dec quantity_control"><i
+                                                class="fa fa-chevron-down" aria-hidden="true"></i></div>
+                                    </div>
                                 </div>
+                                <button class="newsletter_button" id="submitbutton" type="submit">
+                                    <span>Add to Cart</span></button>
                             </div>
-                            <div class="button cart_button"><a href="#">Add to cart</a></div>
+                        </form>
+
+                        <div class="product_quantity_container" th:unless="${coffee.coffeeAvailable == 1}">
+                            <div class="button cart_button"><a>Out of Stock</a></div>
                         </div>
 
-                        <!-- Share -->
-                        <div class="details_share">
-
-                        </div>
                     </div>
                 </div>
             </div>
@@ -275,7 +283,7 @@
                                 <div class="product_title"><a th:href="@{'/coffee/' + ${coffee.coffeeId}}"
                                                               th:text="${coffee.coffeeName}"></a>
                                 </div>
-                                <div class="product_price" th:text="${coffee.coffeePrice}"></div>
+                                <div class="product_price">RM <span th:text="${coffee.coffeePrice}"></span></div>
                             </div>
                         </div>
 

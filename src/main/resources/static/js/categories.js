@@ -197,15 +197,14 @@ $(document).ready(function()
 	            {
 	            	price: function(itemElement)
 	            	{
-	            		var priceEle = $(itemElement).find('.product_price').text().replace( '$', '' );
+	            		var priceEle = $(itemElement).find('.product_price').text().replace( 'RM ', '' );
 	            		return parseFloat(priceEle);
 	            	},
 	            	name: '.product_name',
 	            	stars: function(itemElement)
 	            	{
-	            		var starsEle = $(itemElement).find('.rating');
-	            		var stars = starsEle.attr("data-rating");
-	            		return stars;
+	            		var starsEle = $(itemElement).find('.product_title').text();
+	            		return starsEle;
 	            	}
 	            },
 	            animationOptions:
