@@ -9,7 +9,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
@@ -36,6 +39,7 @@ public class CartController {
 
         session.setAttribute("currentUser", currentUser);
 
+        model.addAttribute("custom", new CustomCartItem());
         model.addAttribute("total", total.setScale(2, RoundingMode.HALF_UP));
         model.addAttribute("cart", cartItemList);
         model.addAttribute("currentUser", currentUser);
@@ -76,25 +80,29 @@ public class CartController {
         return "redirect:/cart";
     }
 
-    @RequestMapping(value = "updatecart/{item}", method = RequestMethod.GET)
-    public String updateCart(@PathVariable List<CustomCartItem> item, ModelMap model, HttpSession session) {
+    @RequestMapping(value = "/updatecart", method = RequestMethod.POST)
+    public String updateCart(@RequestParam(value = "itemId") String itemId, @RequestParam(value = "quantity") String amount, ModelMap model, HttpSession session) {
 
         CustomUser currentUser = (CustomUser) session.getAttribute("currentUser");
 
-        System.out.println(item);
+        currentUser.setCoffeeCart(cartService.updateCart(itemId, amount));
+        session.setAttribute("currentUser", currentUser);
 
+        model.addAttribute("currentUser", currentUser);
 
-        return "redirect:/test";
+        return "redirect:/cart";
     }
 
-    @GetMapping("/test")
-    public String test(@ModelAttribute("item") List<CustomCartItem> item, ModelMap model, HttpSession session) {
+    @PostMapping("/test")
+    public String test(@RequestParam(value = "itemName") String itemId, @RequestParam(value = "quantity") String amount, ModelMap model, HttpSession session) {
 
         CustomUser currentUser = (CustomUser) session.getAttribute("currentUser");
 
-        session.setAttribute("currentUser", currentUser);
+        currentUser.setCoffeeCart(cartService.updateCart(itemId, amount));
+
+
         model.addAttribute("currentUser", currentUser);
-        model.addAttribute("item", item);
+        model.addAttribute("amount", amount);
         return "test";
     }
 }

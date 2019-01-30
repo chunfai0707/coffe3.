@@ -2,6 +2,7 @@ package com.coffe3.mycoffeeshop.service;
 
 import com.coffe3.mycoffeeshop.domain.Coffee;
 import com.coffe3.mycoffeeshop.domain.custom.CustomCartItem;
+import com.coffe3.mycoffeeshop.repository.CoffeeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,8 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class CartService {
+
+    private final CoffeeRepository coffeeRepository;
 
     public List<CustomCartItem> renderCart(List<Coffee> coffeeList) {
 
@@ -34,12 +37,16 @@ public class CartService {
         return list;
     }
 
-    public List<Coffee> updateCart(List<CustomCartItem> cartItemList) {
+    public List<Coffee> updateCart(String itemId, String amount) {
 
+        List<String> coffeeIds = Arrays.asList(itemId.split(","));
+        List<String> quantity = Arrays.asList(amount.split(","));
         List<Coffee> updatedList = new ArrayList<>();
-        for (CustomCartItem c : cartItemList) {
-            for (int i = 0; i < c.getQuantity(); i++) {
-                updatedList.add(c.getItem());
+
+        for (int i = 0; i < coffeeIds.size(); i++) {
+            for (int j = 0; j < Integer.parseInt(quantity.get(i)); j++) {
+                Coffee updateItem = coffeeRepository.findCoffeeByCoffeeId(Integer.parseInt(coffeeIds.get(i)));
+                updatedList.add(updateItem);
             }
         }
 

@@ -317,7 +317,6 @@
                         <div class="product" th:each="coffee : ${coffee}">
                             <div class="product_image"><img alt="" height="300" width="350"
                                                             th:src="@{${coffee.coffeeImgUrl}}"/></div>
-                            <div class="product_extra product_new"><a href="categories.html">New</a></div>
                             <div class="product_content">
                                 <div class="product_title"><a th:href="@{'/coffee/' + ${coffee.coffeeId}}"
                                                               th:text="${coffee.coffeeName}"></a>
