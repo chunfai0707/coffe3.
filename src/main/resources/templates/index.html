@@ -30,14 +30,25 @@
                             <nav class="main_nav">
                                 <ul>
                                     <li><a href="/">Home</a></li>
-                                    <li><a href="/coffee">Coffee</a></li>
-                                    <li><a href="/coffee">Tea</a></li>
-                                    <li><a href="/coffee">Desserts</a></li>
-                                    <li><a href="contact.html">Contact</a></li>
-                                    <li><a href="login" th:if="${currentUser.userName == null}">Login</a>
-                                        <a href="logout" th:unless="${currentUser.userName == null}">Hi, <span
-                                                th:text="${currentUser.userName}"></span></a>
+                                    <li class="hassubs">
+                                        <a href="/product">Beverages</a>
+                                        <ul>
+                                            <li><a th:href="'/product/' + 'coffee'">Coffee</a></li>
+                                            <li><a th:href="'/product/' + 'tea'">Tea</a></li>
+                                        </ul>
                                     </li>
+                                    <li><a th:href="'/product/' + 'desserts'">Desserts</a></li>
+                                    <li><a href="/contact">Contact</a></li>
+                                    <li class="hassubs" th:unless="${currentUser.userName == null}">
+                                        <a href="#" th:text="'Hi, ' + ${currentUser.userName}"></a>
+                                        <ul>
+                                            <li><a href="#">User Profile</a></li>
+                                            <li><a href="#">Order History</a></li>
+                                            <li><a href="logout">Logout</a></li>
+
+                                        </ul>
+                                    </li>
+                                    <li><a href="login" th:if="${currentUser.userName == null}">Login</a></li>
                                 </ul>
                             </nav>
                             <div class="header_extra ml-auto">
@@ -104,16 +115,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!--Social-->
-        <div class="header_social">
-            <ul>
-                <li><a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a></li>
-                <li><a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
-                <li><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
-                <li><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
-            </ul>
         </div>
     </header>
 
@@ -287,7 +288,7 @@
                 <div class="avds_small_inner">
                     <div class="avds_small_content">
                         <div class="avds_title">Coffee</div>
-                        <div class="avds_link"><a href="/coffee">See More</a></div>
+                        <div class="avds_link"><a href="'/' + 'coffee'">See More</a></div>
                     </div>
                 </div>
             </div>
@@ -318,8 +319,9 @@
                             <div class="product_image"><img alt="" height="300" width="350"
                                                             th:src="@{${product.productImgUrl}}"/></div>
                             <div class="product_content">
-                                <div class="product_title"><a th:href="@{'/coffee/' + ${product.productId}}"
-                                                              th:text="${product.productName}"></a>
+                                <div class="product_title"><a
+                                        th:href="@{'/product/' + ${product.productType} + '/' + ${product.productId}}"
+                                        th:text="${product.productName}"></a>
                                 </div>
                                 <div class="product_price"><span>RM </span><span
                                         th:text="${product.productPrice}"></span>

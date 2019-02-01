@@ -31,10 +31,15 @@
                     <nav class="main_nav">
                         <ul>
                             <li><a href="/">Home</a></li>
-                            <li><a href="contact.html">Coffee</a></li>
-                            <li><a href="contact.html">Tea</a></li>
-                            <li><a href="categories.html">Desserts</a></li>
-                            <li><a href="contact.html">Contact</a></li>
+                            <li class="hassubs">
+                                <a href="/product">Beverages</a>
+                                <ul>
+                                    <li><a th:href="'/product/' + 'coffee'">Coffee</a></li>
+                                    <li><a th:href="'/product/' + 'tea'">Tea</a></li>
+                                </ul>
+                            </li>
+                            <li><a th:href="'/product/' + 'desserts'">Desserts</a></li>
+                            <li><a href="/contact">Contact</a></li>
                         </ul>
                     </nav>
                 </div>

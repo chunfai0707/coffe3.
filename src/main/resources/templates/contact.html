@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Cart</title>
+    <title>Contact</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="Sublime project">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="styles/bootstrap4/bootstrap.min.css">
     <link href="plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" type="text/css" href="styles/cart.css">
-    <link rel="stylesheet" type="text/css" href="styles/cart_responsive.css">
+    <link rel="stylesheet" type="text/css" href="styles/contact.css">
+    <link rel="stylesheet" type="text/css" href="styles/contact_responsive.css">
 </head>
 <body>
 
@@ -189,8 +189,8 @@
                             <div class="home_content">
                                 <div class="breadcrumbs">
                                     <ul>
-                                        <li><a href="/">Home</a></li>
-                                        <li>Shopping Cart</li>
+                                        <li><a href="index.html">Home</a></li>
+                                        <li>Contact</li>
                                     </ul>
                                 </div>
                             </div>
@@ -201,136 +201,85 @@
         </div>
     </div>
 
-    <!-- Cart Info -->
-    <div class="cart_info">
+    <!-- Contact -->
+
+    <div class="contact">
         <div class="container">
             <div class="row">
-                <div class="col">
-                    <!-- Column Titles -->
-                    <div class="cart_info_columns clearfix">
-                        <div class="cart_info_col cart_info_col_product">Product</div>
-                        <div class="cart_info_col cart_info_col_price">Price</div>
-                        <div class="cart_info_col cart_info_col_quantity">Quantity</div>
-                        <div class="cart_info_col cart_info_col_total">Total</div>
-                    </div>
-                </div>
-            </div>
-                  
-            <form method="POST" th:action="@{/updatecart}" name="form">  
-                <div class="row cart_items_row" th:each="item : ${cart}">
-                    <div class="col">
-                        <!-- Cart Item -->
-                        <div class="cart_item d-flex flex-lg-row flex-column align-items-lg-center align-items-start justify-content-start">
-                            <!-- Name -->
-                            <div class="cart_item_product d-flex flex-row align-items-center justify-content-start">
-                                <div class="cart_item_image">
-                                    <div><img th:src="@{${item.item.productImgUrl}}" height="183" width="163" alt="">
+
+                <!-- Get in touch -->
+                <div class="col-lg-8 contact_col">
+                    <div class="get_in_touch">
+                        <div class="section_title">Get in Touch</div>
+                        <div class="section_subtitle">Say hello</div>
+                        <div class="contact_form_container">
+                            <form th:action="@{sendmessage}" method="post" id="contact_form" class="contact_form"
+                                  th:object="${contact}">
+                                <div class="row">
+                                    <div class="col-xl-6">
+                                        <!-- Name -->
+                                        <label for="contact_name">First Name*</label>
+                                        <input type="text" id="contact_name" class="contact_input" required="required"
+                                               th:field="*{firstName}">
+                                    </div>
+                                    <div class="col-xl-6 last_name_col">
+                                        <!-- Last Name -->
+                                        <label for="contact_last_name">Last Name*</label>
+                                        <input type="text" id="contact_last_name" class="contact_input"
+                                               required="required" th:field="*{lastName}">
                                     </div>
                                 </div>
-                                <div class="cart_item_name_container">
-                                    <div class="cart_item_name"><a th:href="@{'/coffee/' + ${item.item.productId}}"
-                                                                   th:text="${item.item.productName}"></a></div>
-                                    <div class="cart_item_edit"><a
-                                            th:href="@{'/deletefromcart/' + ${item.item.productId}}">Delete</a></div>
+                                <div>
+                                    <!-- Subject -->
+                                    <label for="contact_company">Subject</label>
+                                    <input type="text" id="contact_company" class="contact_input" th:field="*{subject}">
                                 </div>
-                            </div>
-                            <!-- Price -->
-                            <div class="cart_item_price" th:text="'RM '+${item.itemPrice}"></div>
-                            <!-- Quantity -->
-                            <div class="cart_item_quantity">
-                                <div class="product_quantity_container">
-                                    <div class="product_quantity clearfix">
-                                        <span>Qty</span>
-
-                                        <input id="quantity_input" type="text" pattern="[0-9]*" name="quantity"
-                                               th:value="${item.quantity}" value="1">
-                                        <input type="hidden" name="itemId" th:value="${item.item.productId}">
-
-                                    </div>
+                                <div>
+                                    <label for="contact_textarea">Message*</label>
+                                    <textarea id="contact_textarea" class="contact_input contact_textarea"
+                                              required="required" th:field="*{message}"></textarea>
                                 </div>
-                            </div>
-
-                            <!-- Total -->
-                            <div class="cart_item_total" th:text="'RM '+ ${item.totalPrice}"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row row_cart_buttons">
-                    <div class="col">
-                        <div class="cart_buttons d-flex flex-lg-row flex-column align-items-start justify-content-start">
-                            <div class="button continue_shopping_button"><a href="/product">Continue shopping</a>
-                            </div>
-                            <div class="cart_buttons_right ml-lg-auto">
-                                <div class="button clear_cart_button"><a href="/clearcart">Clear cart</a></div>
-                                <div class="button update_cart_button"><a href="#"
-                                                                          onClick="document.forms['form'].submit();">Update
-                                    Cart</a></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </form>
-            <div class="row row_extra">
-                <div class="col-lg-4">
-
-                    <!-- Delivery -->
-                    <div class="delivery">
-                        <div class="section_title">Shipping method</div>
-                        <div class="section_subtitle">Select the one you want</div>
-                        <div class="delivery_options">
-                            <label class="delivery_option clearfix">Standard delivery
-                                <input type="radio" name="radio">
-                                <span class="checkmark"></span>
-                                <span class="delivery_price">Free</span>
-                            </label>
-                            <label class="delivery_option clearfix">Personal pickup
-                                <input type="radio" checked="checked" name="radio">
-                                <span class="checkmark"></span>
-                                <span class="delivery_price">Free</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <!-- Coupon Code -->
-                    <div class="coupon">
-                        <div class="section_title">Coupon code</div>
-                        <div class="section_subtitle">Enter your coupon code</div>
-                        <div class="coupon_form_container">
-                            <form action="#" id="coupon_form" class="coupon_form">
-                                <input type="text" class="coupon_input" required="required">
-                                <button class="button coupon_button"><span>Apply</span></button>
+                                <button class="button contact_button" type="submit"><span>Send Message</span></button>
                             </form>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-lg-6 offset-lg-2">
-                    <div class="cart_total">
-                        <div class="section_title">Cart total</div>
-                        <div class="section_subtitle">Final info</div>
-                        <div class="cart_total_container">
+                <!-- Contact Info -->
+                <div class="col-lg-3 offset-xl-1 contact_col">
+                    <div class="contact_info">
+                        <div class="contact_info_section">
+                            <div class="contact_info_title">Marketing</div>
                             <ul>
-                                <li class="d-flex flex-row align-items-center justify-content-start">
-                                    <div class="cart_total_title">Subtotal</div>
-                                    <div class="cart_total_value ml-auto">RM <span th:text="${total}"></span></div>
-                                </li>
-                                <li class="d-flex flex-row align-items-center justify-content-start">
-                                    <div class="cart_total_title">Discount</div>
-                                    <div class="cart_total_value ml-auto">RM <span>0.00</span></div>
-                                </li>
-                                <li class="d-flex flex-row align-items-center justify-content-start">
-                                    <div class="cart_total_title">Total</div>
-                                    <div class="cart_total_value ml-auto">RM <span th:text="${total}"></span></div>
-                                </li>
+                                <li>Phone: <span>+6019-8765432</span></li>
+                                <li>Email: <span>marketing@coffe3.com</span></li>
                             </ul>
                         </div>
-                        <div class="button checkout_button"><a href="#">Proceed to checkout</a></div>
+                        <div class="contact_info_section">
+                            <div class="contact_info_title">Information</div>
+                            <ul>
+                                <li>Phone: <span>+6012-3456789</span></li>
+                                <li>Email: <span>info@coffe3.com</span></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+            <div class="row map_row">
+                <div class="col">
 
+                    <!-- Google Map -->
+                    <div class="map">
+                        <div id="google_map" class="google_map">
+                            <div class="map_container">
+                                <div id="map"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Footer -->
@@ -347,8 +296,7 @@
                             Copyright &copy;<script>document.write(new Date().getFullYear());</script>
                             All rights reserved | This template is made with <i class="fa fa-heart-o"
                                                                                 aria-hidden="true"></i> by <a
-                                href="https://colorlib.com" target="_blank">Colorlib</a>
-                        </div>
+                                href="https://colorlib.com" target="_blank">Colorlib</a></div>
                         <div class="footer_social ml-lg-auto">
                             <ul>
                                 <li><a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a></li>
@@ -373,7 +321,7 @@
 <script src="plugins/greensock/animation.gsap.min.js"></script>
 <script src="plugins/greensock/ScrollToPlugin.min.js"></script>
 <script src="plugins/easing/easing.js"></script>
-<script src="plugins/parallax-js-master/parallax.min.js"></script>
-<script src="js/cart.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyCIwF204lFZg1y4kPSIhKaHEXMLYxxuMhA"></script>
+<script src="js/contact.js"></script>
 </body>
 </html>

@@ -40,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "INNER JOIN coffe3_role r ON (ur.role_id=r.role_id) " +
             "WHERE u.user_email=?";
 
-    private final String[] RESOURCES = new String[]{"/", "/register", "/signup", "/coffee/**", "/product",
+    private final String[] RESOURCES = new String[]{"/", "/register", "/signup", "/coffee/**", "/product/**", "/contact", "/sendmessage",
             "/subscribe", "/static/**", "/css/**", "/fonts/**", "/images/**", "/js/**", "/plugins/**", "/scss/**", "/styles/**", "/vendor.jquery/**"};
 
     @Override

@@ -21,20 +21,18 @@ import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
-;
-
 @SuppressWarnings("ALL")
 @Controller
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class CoffeeController {
+public class ProductController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final ProductService productService;
     private final ProductRepository productRepository;
 
-    @GetMapping({"/coffee"})
-    public String listAllCoffee(ModelMap model, HttpSession session) {
+    @GetMapping("/product")
+    public String listAllProducts(ModelMap model, HttpSession session) {
 
         CustomUser currentUser = (CustomUser) session.getAttribute("currentUser");
         CommUtils.logUserInfo(logger, currentUser, session);
@@ -49,14 +47,30 @@ public class CoffeeController {
         return "coffee";
     }
 
-    @RequestMapping(value = "/coffee/{productId}", method = RequestMethod.GET)
-    public String getCoffeeById(@PathVariable Integer productId, ModelMap model, HttpSession session) {
+    @GetMapping("/product/{productType}")
+    public String listProductsByType(@PathVariable String productType, ModelMap model, HttpSession session) {
+
+        CustomUser currentUser = (CustomUser) session.getAttribute("currentUser");
+        CommUtils.logUserInfo(logger, currentUser, session);
+
+        List<Product> list = productRepository.findProductByProductType(productType);
+
+        session.setAttribute("currentUser", currentUser);
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("products", list);
+        model.addAttribute("newsletter", new Newsletter());
+
+        return "coffee";
+    }
+
+    @RequestMapping(value = "/product/{productType}/{productId}", method = RequestMethod.GET)
+    public String getCoffeeById(@PathVariable String productType, @PathVariable Integer productId, ModelMap model, HttpSession session) {
 
         CustomUser currentUser = (CustomUser) session.getAttribute("currentUser");
         CommUtils.logUserInfo(logger, currentUser, session);
 
         Product product = productRepository.findProductByProductId(productId);
-        List<Product> list = productRepository.findAll();
+        List<Product> list = productRepository.findProductByProductType(productType);
 
         List<Product> relatedList = new ArrayList<>();
         relatedList = productService.showRelatedItems(product, list);

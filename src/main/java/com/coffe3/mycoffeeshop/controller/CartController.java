@@ -68,7 +68,7 @@ public class CartController {
         model.addAttribute("amount", amount);
         model.addAttribute("currentUser", currentUser);
 
-        return "redirect:/coffee";
+        return "redirect:/cart";
 
     }
 
@@ -87,12 +87,21 @@ public class CartController {
     }
 
     @RequestMapping(value = "/updatecart", method = RequestMethod.POST)
-    public String updateCart(@RequestParam(value = "itemId") String itemId, @RequestParam(value = "quantity") String amount, ModelMap model, HttpSession session) {
+    public String updateCart(@RequestParam(value = "itemId", required = false) String itemId,
+                             @RequestParam(value = "quantity", required = false) String amount,
+                             ModelMap model, HttpSession session) {
 
         CustomUser currentUser = (CustomUser) session.getAttribute("currentUser");
         CommUtils.logUserInfo(logger, currentUser, session);
 
-        currentUser.setCoffeeCart(cartService.updateCart(itemId, amount));
+        if (itemId == null || amount == null) {
+            session.setAttribute("currentUser", currentUser);
+            model.addAttribute("currentUser", currentUser);
+            return "redirect:/cart";
+
+        } else {
+            currentUser.setCoffeeCart(cartService.updateCart(itemId, amount));
+        }
 
         session.setAttribute("currentUser", currentUser);
         model.addAttribute("currentUser", currentUser);
@@ -100,7 +109,7 @@ public class CartController {
         return "redirect:/cart";
     }
 
-    @RequestMapping(value = "/deletefromcart/{coffeeId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/deletefromcart/{productId}", method = RequestMethod.GET)
     public String getCoffeeById(@PathVariable Integer productId, ModelMap model, HttpSession session) {
 
         CustomUser currentUser = (CustomUser) session.getAttribute("currentUser");

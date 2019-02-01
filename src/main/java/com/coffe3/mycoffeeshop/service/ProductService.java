@@ -18,23 +18,31 @@ public class ProductService {
         List<Product> latestList;
 
         if (list.size() > 8) {
-            latestList = list.stream().sorted(Comparator.comparing(Product::getProductLastUpdated).reversed()).collect(Collectors.toList()).subList(0, 8);
+            latestList = list.stream()
+                    .sorted(Comparator.comparing(Product::getProductLastUpdated).reversed())
+                    .collect(Collectors.toList()).subList(0, 8);
         } else {
-            latestList = list.stream().sorted(Comparator.comparing(Product::getProductLastUpdated).reversed()).collect(Collectors.toList()).subList(0, list.size());
+            latestList = list.stream()
+                    .sorted(Comparator.comparing(Product::getProductLastUpdated).reversed())
+                    .collect(Collectors.toList()).subList(0, list.size());
         }
 
         return latestList;
     }
 
-    public List<Product> showRelatedItems(Product coffee, List<Product> list) {
+    public List<Product> showRelatedItems(Product product, List<Product> list) {
 
         List<Product> relatedList;
-        list.remove(coffee);
+        list.remove(product);
 
         if (list.size() > 4) {
-            relatedList = list.stream().sorted(Comparator.comparing(Product::getProductLastUpdated).reversed()).collect(Collectors.toList()).subList(0, 4);
+            relatedList = list.stream()
+                    .sorted(Comparator.comparing(Product::getProductLastUpdated).reversed())
+                    .collect(Collectors.toList()).subList(0, 4);
         } else {
-            relatedList = list.stream().sorted(Comparator.comparing(Product::getProductLastUpdated).reversed()).collect(Collectors.toList()).subList(0, list.size());
+            relatedList = list.stream()
+                    .sorted(Comparator.comparing(Product::getProductLastUpdated).reversed())
+                    .collect(Collectors.toList()).subList(0, list.size());
         }
 
         return relatedList;

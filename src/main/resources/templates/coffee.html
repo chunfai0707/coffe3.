@@ -6,13 +6,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="Sublime project">
     <meta name="viewport" content="width=device-width, initial-scale=0.9">
-    <link rel="stylesheet" type="text/css" href="styles/bootstrap4/bootstrap.min.css">
-    <link href="plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" type="text/css" href="plugins/OwlCarousel2-2.2.1/owl.carousel.css">
-    <link rel="stylesheet" type="text/css" href="plugins/OwlCarousel2-2.2.1/owl.theme.default.css">
-    <link rel="stylesheet" type="text/css" href="plugins/OwlCarousel2-2.2.1/animate.css">
-    <link rel="stylesheet" type="text/css" href="styles/categories.css">
-    <link rel="stylesheet" type="text/css" href="styles/categories_responsive.css">
+    <link rel="stylesheet" type="text/css" href="../styles/bootstrap4/bootstrap.min.css">
+    <link href="../plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="../plugins/OwlCarousel2-2.2.1/owl.carousel.css">
+    <link rel="stylesheet" type="text/css" href="../plugins/OwlCarousel2-2.2.1/owl.theme.default.css">
+    <link rel="stylesheet" type="text/css" href="../plugins/OwlCarousel2-2.2.1/animate.css">
+    <link rel="stylesheet" type="text/css" href="../styles/categories.css">
+    <link rel="stylesheet" type="text/css" href="../styles/categories_responsive.css">
 </head>
 <body>
 
@@ -30,14 +30,25 @@
                             <nav class="main_nav">
                                 <ul>
                                     <li><a href="/">Home</a></li>
-                                    <li><a href="/coffee">Coffee</a></li>
-                                    <li><a href="/coffee">Tea</a></li>
-                                    <li><a href="/coffee">Desserts</a></li>
-                                    <li><a href="contact.html">Contact</a></li>
-                                    <li><a href="login" th:if="${currentUser.userName == null}">Login</a>
-                                        <a href="logout" th:unless="${currentUser.userName == null}">Hi, <span
-                                                th:text="${currentUser.userName}"></span></a>
+                                    <li class="hassubs">
+                                        <a href="/product">Beverages</a>
+                                        <ul>
+                                            <li><a th:href="'/product/' + 'coffee'">Coffee</a></li>
+                                            <li><a th:href="'/product/' + 'tea'">Tea</a></li>
+                                        </ul>
                                     </li>
+                                    <li><a th:href="'/product/' + 'desserts'">Desserts</a></li>
+                                    <li><a href="/contact">Contact</a></li>
+                                    <li class="hassubs" th:unless="${currentUser.userName == null}">
+                                        <a href="#" th:text="'Hi, ' + ${currentUser.userName}"></a>
+                                        <ul>
+                                            <li><a href="#">User Profile</a></li>
+                                            <li><a href="#">Order History</a></li>
+                                            <li><a href="logout">Logout</a></li>
+
+                                        </ul>
+                                    </li>
+                                    <li><a href="login" th:if="${currentUser.userName == null}">Login</a></li>
                                 </ul>
                             </nav>
                             <div class="header_extra ml-auto">
@@ -104,16 +115,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Social -->
-        <div class="header_social">
-            <ul>
-                <li><a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a></li>
-                <li><a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
-                <li><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
-                <li><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
-            </ul>
         </div>
     </header>
 
@@ -183,7 +184,7 @@
 
     <div class="home">
         <div class="home_container">
-            <div class="home_background" style="background-image:url(images/home_slider_3.jpg)"></div>
+            <div class="home_background" style="background-image:url(../images/home_slider_3.jpg)"></div>
             <div class="home_content_container">
                 <div class="container">
                     <div class="row">
@@ -240,10 +241,11 @@
                         <!-- Product -->
                         <div class="product" th:each="product : ${products}">
                             <div class="product_image"><img alt="" height="300" width="350"
-                                                            th:src="@{${product.productImgUrl}}"/></div>
+                                                            th:src="@{'../' + ${product.productImgUrl}}"/></div>
                             <div class="product_content">
-                                <div class="product_title"><a th:href="@{'/coffee/' + ${product.productId}}"
-                                                              th:text="${product.productName}"></a></div>
+                                <div class="product_title"><a
+                                        th:href="@{'/product/' + ${product.productType} + '/' + ${product.productId}}"
+                                        th:text="${product.productName}"></a></div>
                                 <div class="product_price" th:text="'RM ' + ${product.productPrice}">
                                 </div>
                             </div>
@@ -323,18 +325,18 @@
     </footer>
 </div>
 
-<script src="js/jquery-3.2.1.min.js"></script>
-<script src="styles/bootstrap4/popper.js"></script>
-<script src="styles/bootstrap4/bootstrap.min.js"></script>
-<script src="plugins/greensock/TweenMax.min.js"></script>
-<script src="plugins/greensock/TimelineMax.min.js"></script>
-<script src="plugins/scrollmagic/ScrollMagic.min.js"></script>
-<script src="plugins/greensock/animation.gsap.min.js"></script>
-<script src="plugins/greensock/ScrollToPlugin.min.js"></script>
-<script src="plugins/OwlCarousel2-2.2.1/owl.carousel.js"></script>
-<script src="plugins/Isotope/isotope.pkgd.min.js"></script>
-<script src="plugins/easing/easing.js"></script>
-<script src="plugins/parallax-js-master/parallax.min.js"></script>
-<script src="js/categories.js"></script>
+<script src="../js/jquery-3.2.1.min.js"></script>
+<script src="../styles/bootstrap4/popper.js"></script>
+<script src="../styles/bootstrap4/bootstrap.min.js"></script>
+<script src="../plugins/greensock/TweenMax.min.js"></script>
+<script src="../plugins/greensock/TimelineMax.min.js"></script>
+<script src="../plugins/scrollmagic/ScrollMagic.min.js"></script>
+<script src="../plugins/greensock/animation.gsap.min.js"></script>
+<script src="../plugins/greensock/ScrollToPlugin.min.js"></script>
+<script src="../plugins/OwlCarousel2-2.2.1/owl.carousel.js"></script>
+<script src="../plugins/Isotope/isotope.pkgd.min.js"></script>
+<script src="../plugins/easing/easing.js"></script>
+<script src="../plugins/parallax-js-master/parallax.min.js"></script>
+<script src="../js/categories.js"></script>
 </body>
 </html>
