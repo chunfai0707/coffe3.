@@ -1,10 +1,10 @@
 package com.coffe3.mycoffeeshop.controller;
 
-import com.coffe3.mycoffeeshop.domain.Coffee;
 import com.coffe3.mycoffeeshop.domain.Newsletter;
+import com.coffe3.mycoffeeshop.domain.Product;
 import com.coffe3.mycoffeeshop.domain.custom.CustomUser;
-import com.coffe3.mycoffeeshop.repository.CoffeeRepository;
-import com.coffe3.mycoffeeshop.service.CoffeeService;
+import com.coffe3.mycoffeeshop.repository.ProductRepository;
+import com.coffe3.mycoffeeshop.service.ProductService;
 import com.coffe3.mycoffeeshop.tools.CommUtils;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -21,6 +21,8 @@ import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
+;
+
 @SuppressWarnings("ALL")
 @Controller
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -28,8 +30,8 @@ public class CoffeeController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private final CoffeeService coffeeService;
-    private final CoffeeRepository coffeeRepository;
+    private final ProductService productService;
+    private final ProductRepository productRepository;
 
     @GetMapping({"/coffee"})
     public String listAllCoffee(ModelMap model, HttpSession session) {
@@ -37,30 +39,30 @@ public class CoffeeController {
         CustomUser currentUser = (CustomUser) session.getAttribute("currentUser");
         CommUtils.logUserInfo(logger, currentUser, session);
 
-        List<Coffee> list = coffeeRepository.findAll();
+        List<Product> list = productRepository.findAll();
 
         session.setAttribute("currentUser", currentUser);
         model.addAttribute("currentUser", currentUser);
-        model.addAttribute("coffee", list);
+        model.addAttribute("products", list);
         model.addAttribute("newsletter", new Newsletter());
 
         return "coffee";
     }
 
-    @RequestMapping(value = "/coffee/{coffeeId}", method = RequestMethod.GET)
-    public String getCoffeeById(@PathVariable Integer coffeeId, ModelMap model, HttpSession session) {
+    @RequestMapping(value = "/coffee/{productId}", method = RequestMethod.GET)
+    public String getCoffeeById(@PathVariable Integer productId, ModelMap model, HttpSession session) {
 
         CustomUser currentUser = (CustomUser) session.getAttribute("currentUser");
         CommUtils.logUserInfo(logger, currentUser, session);
 
-        Coffee coffee = coffeeRepository.findCoffeeByCoffeeId(coffeeId);
-        List<Coffee> list = coffeeRepository.findAll();
+        Product product = productRepository.findProductByProductId(productId);
+        List<Product> list = productRepository.findAll();
 
-        List<Coffee> relatedList = new ArrayList<>();
-        relatedList = coffeeService.showRelatedItems(coffee, list);
+        List<Product> relatedList = new ArrayList<>();
+        relatedList = productService.showRelatedItems(product, list);
 
         session.setAttribute("currentUser", currentUser);
-        model.addAttribute("coffee", coffee);
+        model.addAttribute("product", product);
         model.addAttribute("related", relatedList);
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("newsletter", new Newsletter());

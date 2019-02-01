@@ -1,9 +1,9 @@
 package com.coffe3.mycoffeeshop.controller;
 
-import com.coffe3.mycoffeeshop.domain.Coffee;
+import com.coffe3.mycoffeeshop.domain.Product;
 import com.coffe3.mycoffeeshop.domain.custom.CustomCartItem;
 import com.coffe3.mycoffeeshop.domain.custom.CustomUser;
-import com.coffe3.mycoffeeshop.repository.CoffeeRepository;
+import com.coffe3.mycoffeeshop.repository.ProductRepository;
 import com.coffe3.mycoffeeshop.service.CartService;
 import com.coffe3.mycoffeeshop.tools.CommUtils;
 import lombok.RequiredArgsConstructor;
@@ -12,10 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
@@ -29,7 +26,7 @@ public class CartController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private final CoffeeRepository coffeeRepository;
+    private final ProductRepository productRepository;
     private final CartService cartService;
 
     @RequestMapping(value = "/cart", method = RequestMethod.GET)
@@ -55,19 +52,19 @@ public class CartController {
     }
 
     @RequestMapping(value = "/addtocart", method = RequestMethod.GET)
-    public String addToCart(@RequestParam(value = "coffee") Integer coffeeId, @RequestParam(value = "amount") Integer amount, ModelMap model, HttpSession session) {
+    public String addToCart(@RequestParam(value = "coffee") Integer productId, @RequestParam(value = "amount") Integer amount, ModelMap model, HttpSession session) {
 
         CustomUser currentUser = (CustomUser) session.getAttribute("currentUser");
         CommUtils.logUserInfo(logger, currentUser, session);
 
-        Coffee coffee = coffeeRepository.findCoffeeByCoffeeId(coffeeId);
+        Product coffee = productRepository.findProductByProductId(productId);
 
         for (int i = 0; i < amount; i++) {
             currentUser.getCoffeeCart().add(coffee);
         }
 
         session.setAttribute("currentUser", currentUser);
-        model.addAttribute("coffee", coffeeId);
+        model.addAttribute("coffee", productId);
         model.addAttribute("amount", amount);
         model.addAttribute("currentUser", currentUser);
 
@@ -96,6 +93,20 @@ public class CartController {
         CommUtils.logUserInfo(logger, currentUser, session);
 
         currentUser.setCoffeeCart(cartService.updateCart(itemId, amount));
+
+        session.setAttribute("currentUser", currentUser);
+        model.addAttribute("currentUser", currentUser);
+
+        return "redirect:/cart";
+    }
+
+    @RequestMapping(value = "/deletefromcart/{coffeeId}", method = RequestMethod.GET)
+    public String getCoffeeById(@PathVariable Integer productId, ModelMap model, HttpSession session) {
+
+        CustomUser currentUser = (CustomUser) session.getAttribute("currentUser");
+        CommUtils.logUserInfo(logger, currentUser, session);
+
+        currentUser.getCoffeeCart().removeIf(x -> x.equals(productRepository.findProductByProductId(productId)));
 
         session.setAttribute("currentUser", currentUser);
         model.addAttribute("currentUser", currentUser);

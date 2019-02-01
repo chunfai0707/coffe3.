@@ -209,7 +209,7 @@
 
                     <!-- Product Sorting -->
                     <div class="sorting_bar d-flex flex-md-row flex-column align-items-md-center justify-content-md-start">
-                        <div class="results">Showing <span th:text="${#lists.size(coffee)}"></span> results</div>
+                        <div class="results">Showing <span th:text="${#lists.size(products)}"></span> results</div>
                         <div class="sorting_container ml-md-auto">
                             <div class="sorting">
                                 <ul class="item_sorting">
@@ -238,13 +238,13 @@
                     <div class="product_grid">
 
                         <!-- Product -->
-                        <div class="product" th:each="coffee : ${coffee}">
+                        <div class="product" th:each="product : ${products}">
                             <div class="product_image"><img alt="" height="300" width="350"
-                                                            th:src="@{${coffee.coffeeImgUrl}}"/></div>
+                                                            th:src="@{${product.productImgUrl}}"/></div>
                             <div class="product_content">
-                                <div class="product_title"><a th:href="@{'/coffee/' + ${coffee.coffeeId}}"
-                                                              th:text="${coffee.coffeeName}"></a></div>
-                                <div class="product_price" th:text="'RM ' + ${coffee.coffeePrice}">
+                                <div class="product_title"><a th:href="@{'/coffee/' + ${product.productId}}"
+                                                              th:text="${product.productName}"></a></div>
+                                <div class="product_price" th:text="'RM ' + ${product.productPrice}">
                                 </div>
                             </div>
                         </div>

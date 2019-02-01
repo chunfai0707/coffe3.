@@ -1,12 +1,12 @@
 package com.coffe3.mycoffeeshop.controller;
 
-import com.coffe3.mycoffeeshop.domain.Coffee;
 import com.coffe3.mycoffeeshop.domain.Newsletter;
+import com.coffe3.mycoffeeshop.domain.Product;
 import com.coffe3.mycoffeeshop.domain.User;
 import com.coffe3.mycoffeeshop.domain.custom.CustomUser;
-import com.coffe3.mycoffeeshop.repository.CoffeeRepository;
-import com.coffe3.mycoffeeshop.service.CoffeeService;
+import com.coffe3.mycoffeeshop.repository.ProductRepository;
 import com.coffe3.mycoffeeshop.service.NewsletterService;
+import com.coffe3.mycoffeeshop.service.ProductService;
 import com.coffe3.mycoffeeshop.service.UserService;
 import com.coffe3.mycoffeeshop.tools.CommUtils;
 import lombok.RequiredArgsConstructor;
@@ -34,8 +34,8 @@ public class MainController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private final CoffeeRepository coffeeRepository;
-    private final CoffeeService coffeeService;
+    private final ProductRepository productRepository;
+    private final ProductService productService;
     private final UserService userService;
     private final NewsletterService newsletterService;
 
@@ -44,12 +44,12 @@ public class MainController {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        List<Coffee> latestList = new ArrayList<>();
+        List<Product> latestList = new ArrayList<>();
         List<User> users = userService.getUserByEmail(auth.getName());
 
         CustomUser currentUser = (CustomUser) session.getAttribute("currentUser") == null ? new CustomUser() : (CustomUser) session.getAttribute("currentUser");
 
-        List<Coffee> cart = currentUser.getCoffeeCart() == null ? new ArrayList<>() : currentUser.getCoffeeCart();
+        List<Product> cart = currentUser.getCoffeeCart() == null ? new ArrayList<>() : currentUser.getCoffeeCart();
         currentUser.setCoffeeCart(cart);
 
         CommUtils.logUserInfo(logger, currentUser, session);
@@ -67,10 +67,10 @@ public class MainController {
 
         session.setAttribute("currentUser", currentUser);
 
-        List<Coffee> list = coffeeRepository.findAll();
-        latestList = coffeeService.showLatestItem(list);
+        List<Product> list = productRepository.findAll();
+        latestList = productService.showLatestItem(list);
 
-        model.addAttribute("coffee", latestList);
+        model.addAttribute("products", latestList);
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("newsletter", new Newsletter());
 

@@ -210,34 +210,34 @@
                 <!-- Product Image -->
                 <div class="col-lg-6">
                     <div class="details_image">
-                        <div class="details_image_large"><img th:src="'../' + ${coffee.coffeeImgUrl}" alt=""></div>
+                        <div class="details_image_large"><img th:src="'../' + ${product.productImgUrl}" alt=""></div>
                     </div>
                 </div>
 
                 <!-- Product Content -->
                 <div class="col-lg-6">
                     <div class="details_content">
-                        <div class="details_name" th:text="${coffee.coffeeName}"></div>
+                        <div class="details_name" th:text="${product.productName}"></div>
                         <!-- <div class="details_discount">$890</div> -->
-                        <div class="details_price">RM <span th:text="${coffee.coffeePrice}"></span></div>
+                        <div class="details_price">RM <span th:text="${product.productPrice}"></span></div>
 
                         <!-- In Stock -->
                         <div class="in_stock_container">
                             <div class="availability">Availability:</div>
-                            <span style="color:green" th:if="${coffee.coffeeAvailable == 1}">In Stock</span>
-                            <span style="color:red" th:unless="${coffee.coffeeAvailable == 1}">Out of Stock</span>
+                            <span style="color:green" th:if="${product.productAvailable == 1}">In Stock</span>
+                            <span style="color:red" th:unless="${product.productAvailable == 1}">Out of Stock</span>
                         </div>
                         <div class="details_text">
-                            <p th:text="${coffee.coffeeDescription}"></p>
+                            <p th:text="${product.productDescription}"></p>
                         </div>
 
                         <!-- Product Quantity -->
-                        <form th:action="@{/addtocart}" method="get" th:if="${coffee.coffeeAvailable == 1}">
+                        <form th:action="@{/addtocart}" method="get" th:if="${product.productAvailable == 1}">
                             <div class="product_quantity_container">
                                 <div class="product_quantity clearfix">
                                     <span>Qty</span>
                                     <input id="quantity_input" name="amount" type="text" pattern="[0-9]*" value="1">
-                                    <input type="hidden" id="coffeeId" name="coffee" th:value="${coffee.coffeeId}">
+                                    <input type="hidden" id="productId" name="coffee" th:value="${product.productId}">
                                     <div class="quantity_buttons">
                                         <div id="quantity_inc_button" class="quantity_inc quantity_control"><i
                                                 class="fa fa-chevron-up" aria-hidden="true"></i></div>
@@ -250,7 +250,7 @@
                             </div>
                         </form>
 
-                        <div class="product_quantity_container" th:unless="${coffee.coffeeAvailable == 1}">
+                        <div class="product_quantity_container" th:unless="${product.productAvailable == 1}">
                             <div class="button cart_button"><a>Out of Stock</a></div>
                         </div>
 
@@ -276,14 +276,15 @@
 
                         <!-- Product -->
 
-                        <div class="product" th:each="coffee : ${related}">
-                            <div class="product_image"><img th:src="'../' + ${coffee.coffeeImgUrl}" alt="" height="320"
+                        <div class="product" th:each="product : ${related}">
+                            <div class="product_image"><img th:src="'../' + ${product.productImgUrl}" alt=""
+                                                            height="320"
                                                             width="320"></div>
                             <div class="product_content">
-                                <div class="product_title"><a th:href="@{'/coffee/' + ${coffee.coffeeId}}"
-                                                              th:text="${coffee.coffeeName}"></a>
+                                <div class="product_title"><a th:href="@{'/coffee/' + ${product.productId}}"
+                                                              th:text="${product.productName}"></a>
                                 </div>
-                                <div class="product_price">RM <span th:text="${coffee.coffeePrice}"></span></div>
+                                <div class="product_price">RM <span th:text="${product.productPrice}"></span></div>
                             </div>
                         </div>
 
