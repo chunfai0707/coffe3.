@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Coffe3. | Sign Up</title>
+
+    <!-- Font Icon -->
+    <link rel="stylesheet" href="fonts/material-icon/css/material-design-iconic-font.min.css">
+
+    <!-- Main css -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="styles/bootstrap4/bootstrap.min.css">
+    <link href="plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="plugins/OwlCarousel2-2.2.1/owl.carousel.css">
+    <link rel="stylesheet" type="text/css" href="plugins/OwlCarousel2-2.2.1/owl.theme.default.css">
+    <link rel="stylesheet" type="text/css" href="plugins/OwlCarousel2-2.2.1/animate.css">
+    <link rel="stylesheet" type="text/css" href="styles/main_styles.css">
+    <link rel="stylesheet" type="text/css" href="styles/responsive.css">
+
+</head>
+<body>
+<div class="header_container">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="header_content d-flex flex-row align-items-center justify-content-start">
+                    <div class="logo"><a href="/">Coffe3.</a></div>
+                    <nav class="main_nav">
+                        <ul>
+                            <li><a href="/">Home</a></li>
+                            <li class="hassubs">
+                                <a href="/product">Beverages</a>
+                                <ul>
+                                    <li><a th:href="'/product/' + 'coffee'">Coffee</a></li>
+                                    <li><a th:href="'/product/' + 'tea'">Tea</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="categories.html">Desserts</a></li>
+                            <li><a href="contact.html">Contact</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="main">
+
+    <!-- Sign up form -->
+    <section class="signup">
+        <div class="container">
+            <div class="signup-content">
+                <div class="signup-form">
+                    <h2 class="form-title">Sign up</h2>
+                    <form method="POST" class="register-form" id="register-form" th:action="@{/signup}"
+                          th:object="${user}">
+                        <div class="form-group">
+                            <label for="name"><i class="zmdi zmdi-account material-icons-name"></i></label>
+                            <input type="text" name="name" id="name" placeholder="Your Name" th:field="*{userName}"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="email"><i class="zmdi zmdi-email"></i></label>
+                            <input type="email" name="email" id="email" placeholder="Your Email"
+                                   th:field="*{userEmail}"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="pass"><i class="zmdi zmdi-lock"></i></label>
+                            <input type="password" name="pass" id="pass" placeholder="Password"
+                                   th:field="*{userPassword}"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="re-pass"><i class="zmdi zmdi-lock-outline"></i></label>
+                            <input type="password" name="re_pass" id="re_pass" placeholder="Repeat your password"
+                                   th:field="*{userPassword}"/>
+                        </div>
+                        <div class="form-group form-button">
+                            <input type="submit" name="signup" id="signup" class="form-submit" value="Register"/>
+                        </div>
+                    </form>
+                    <br>
+                    <div th:switch="${message}">
+                        <div th:case="'Success'" class="alert alert-success">
+                            <strong>Success! </strong> Registration Succesful.
+                            <span>Click <a href="login"><strong>Here</strong></a> to Login.</span>
+                        </div>
+                        <div th:case="'Failed'" class="alert alert-danger">
+                            <strong>Failure! </strong> Registration Failed.
+                            <strong th:text="${errorMsg}"></strong>
+                        </div>
+                    </div>
+                </div>
+                <div class="signup-image">
+                    <figure><img src="images/signup-image.jpg" alt="sign up image"></figure>
+                    <a href="login" class="signup-image-link">I am already member</a>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- JS -->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
