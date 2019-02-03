@@ -228,8 +228,9 @@
                                     </div>
                                 </div>
                                 <div class="cart_item_name_container">
-                                    <div class="cart_item_name"><a th:href="@{'/coffee/' + ${item.item.productId}}"
-                                                                   th:text="${item.item.productName}"></a></div>
+                                    <div class="cart_item_name"><a
+                                            th:href="@{'/product/' + ${item.item.productType} + '/' + ${item.item.productId}}"
+                                            th:text="${item.item.productName}"></a></div>
                                     <div class="cart_item_edit"><a
                                             th:href="@{'/deletefromcart/' + ${item.item.productId}}">Delete</a></div>
                                 </div>
