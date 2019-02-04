@@ -108,8 +108,9 @@
                 <div class="row">
                     <div class="col">
                         <div class="search_panel_content d-flex flex-row align-items-center justify-content-end">
-                            <form action="#">
-                                <input type="text" class="search_input" placeholder="Search" required="required">
+                            <form th:action="@{/search}" method="post">
+                                <input type="text" class="search_input" placeholder="Search" required="required"
+                                       name="search">
                             </form>
                         </div>
                     </div>
@@ -288,7 +289,7 @@
                 <div class="avds_small_inner">
                     <div class="avds_small_content">
                         <div class="avds_title">Coffee</div>
-                        <div class="avds_link"><a href="'/' + 'coffee'">See More</a></div>
+                        <div class="avds_link"><a th:href="'/product/' + 'coffee'">See More</a></div>
                     </div>
                 </div>
             </div>
@@ -300,7 +301,7 @@
                         <div class="avds_text">Aromatic beverage commonly prepared by pouring hot or boiling water over
                             cured leaves of the Camellia sinensis, an evergreen shrub (bush) native to East Asia.
                         </div>
-                        <div class="avds_link avds_link_large"><a href="/coffee">See More</a></div>
+                        <div class="avds_link avds_link_large"><a th:href="'/product/' + 'tea'">See More</a></div>
                     </div>
                 </div>
             </div>

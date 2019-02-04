@@ -40,6 +40,8 @@ public class ProductController {
         List<Product> list = productRepository.findAll();
 
         session.setAttribute("currentUser", currentUser);
+
+        model.addAttribute("type", "beverages");
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("products", list);
         model.addAttribute("newsletter", new Newsletter());
@@ -56,6 +58,8 @@ public class ProductController {
         List<Product> list = productRepository.findProductByProductType(productType);
 
         session.setAttribute("currentUser", currentUser);
+
+        model.addAttribute("type", productType);
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("products", list);
         model.addAttribute("newsletter", new Newsletter());
