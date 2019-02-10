@@ -108,8 +108,9 @@
                 <div class="row">
                     <div class="col">
                         <div class="search_panel_content d-flex flex-row align-items-center justify-content-end">
-                            <form action="#">
-                                <input type="text" class="search_input" placeholder="Search" required="required">
+                            <form th:action="@{/search}" method="post">
+                                <input type="text" class="search_input" placeholder="Search" required="required"
+                                       name="search">
                             </form>
                         </div>
                     </div>
@@ -184,15 +185,45 @@
 
     <div class="home">
         <div class="home_container">
-            <div class="home_background" style="background-image:url(../images/home_slider_3.jpg)"></div>
+            <div class="home_background" style="background-image:url(../images/home_slider_1.jpg)"
+                 th:if="${type == 'beverages'}"></div>
+            <div class="home_background" style="background-image:url(../images/home_slider_3.jpg)"
+                 th:if="${type == 'coffee'}"></div>
+            <div class="home_background" style="background-image:url(../images/home_slider_4.jpg)"
+                 th:if="${type == 'tea'}"></div>
+            <div class="home_background" style="background-image:url(../images/home_slider_5.jpg)"
+                 th:if="${type == 'desserts'}"></div>
+            <div class="home_background" style="background-image:url(../images/home_slider_5.jpg)"
+                 th:if="${type == 'search'}"></div>
+
             <div class="home_content_container">
                 <div class="container">
                     <div class="row">
                         <div class="col">
-                            <div class="home_content">
+                            <div class="home_content" th:if="${type == 'coffee'}">
                                 <div class="home_title">Coffee<span>.</span></div>
                                 <div class="home_text"><p>Brewed by expressing or forcing a small amount of nearly
                                     boiling water under pressure through finely ground coffee beans.</p></div>
+                            </div>
+                            <div class="home_content" th:if="${type == 'tea'}">
+                                <div class="home_title" style="color:black">Tea<span>.</span></div>
+                                <div class="home_text"><p style="color:black">Aromatic beverage commonly prepared by
+                                    pouring hot or boiling water over
+                                    cured leaves of the Camellia sinensis.</p></div>
+                            </div>
+                            <div class="home_content" th:if="${type == 'desserts'}">
+                                <div class="home_title" style="color:black">Desserts<span>.</span></div>
+                                <div class="home_text"><p style="color:black">If dessert is your favourite part of the
+                                    meal, then this collection is for you!</p></div>
+                            </div>
+                            <div class="home_content" th:if="${type == 'beverages'}">
+                                <div class="home_title">Beverages<span>.</span></div>
+                                <div class="home_text"><p>Check out our collections of beverages. </p></div>
+                            </div>
+                            <div class="home_content" th:if="${type == 'search'}">
+                                <div class="home_title" style="color:black">Search Result<span>.</span></div>
+                                <div class="home_text"><p style="color:black">Check out our collections of beverages and
+                                    desserts. </p></div>
                             </div>
                         </div>
                     </div>

@@ -17,10 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -82,6 +79,26 @@ public class MainController {
         newsletterService.subscribeNewsletter(newsletter);
         return "redirect:/";
     }
+
+    @RequestMapping(value = "/search", method = RequestMethod.POST)
+    public String search(@RequestParam(value = "search") String search, ModelMap model, HttpSession session) {
+
+        CustomUser currentUser = (CustomUser) session.getAttribute("currentUser");
+        CommUtils.logUserInfo(logger, currentUser, session);
+
+        List<Product> list = productRepository.findByProductNameContainingIgnoreCase(search);
+
+
+        session.setAttribute("currentUser", currentUser);
+
+        model.addAttribute("type", "search");
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("products", list);
+        model.addAttribute("newsletter", new Newsletter());
+
+        return "coffee";
+    }
+
 
     @GetMapping("/logout")
     public String destroySession(HttpServletRequest request) {
